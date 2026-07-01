@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMania - Tonton Filem Terbaik Dunia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#E50914',
+                            darkBg: '#0F0F13',
+                            cardBg: '#1A1A22',
+                            accent: '#F59E0B',
+                            hoverRed: '#B80710'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0F0F13;
+            color: #F3F4F6;
+            scroll-behavior: smooth;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F0F13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2D2D39;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E50914;
+        }
+        
+        /* Backdrop Blur Fix */
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        /* Movie Card Hover Effect */
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden font-sans">
+
+    <script>
+        // Pangkalan data filem simulasi dari serata dunia - Dipertingkatkan dengan poster & latar belakang yang tepat
+        const movieDatabase = [
+            {
+                id: 1,
+                title: "Mat Kilau: Kebangkitan Pahlawan",
+                genre: "Aksi, Sejarah",
+                year: 2022,
+                rating: 4.8,
+                origin: "Malaysia",
+                language: "Bahasa Melayu",
+                duration: "1j 58m",
+                director: "Syamsul Yusof",
+                cast: ["Adi Putra", "Beto Kusyairy", "Fattah Amin", "Yayan Ruhian"],
+                overview: "Mengisahkan perjuangan pahlawan Melayu terkemuka, Mat Kilau bersama rakan-rakannya menentang penjajah British di Pahang pada akhir abad ke-19.",
+                poster: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hand-holding-a-swords-at-a-historical-reenactment-40013-large.mp4"
+            },
+            {
+                id: 2,
+                title: "Interstellar Horizon",
+                genre: "Sci-Fi, Pengembaraan",
+                year: 2024,
+                rating: 4.9,
+                origin: "Hollywood",
+                language: "Bahasa Inggeris",
+                duration: "2j 49m",
+                director: "Christopher Nolan",
+                cast: ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"],
+                overview: "Sekumpulan angkasawan mengembara melalui lohong cacing di angkasa lepas untuk mencari planet baharu yang boleh menempatkan umat manusia demi kelangsungan hidup.",
+                poster: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-planet-spinning-in-space-39828-large.mp4"
+            },
+            {
+                id: 3,
+                title: "Love in Seoul",
+                genre: "Romantik, Drama",
+                year: 2025,
+                rating: 4.5,
+                origin: "Korea Selatan",
+                language: "Bahasa Korea",
+                duration: "1j 45m",
+                director: "Park Chan-wook",
+                cast: ["Lee Min-ho", "Song Hye-kyo", "Park Seo-joon"],
+                overview: "Kisah cinta manis dan penuh emosi antara seorang jurugambar jalanan yang berbakat dengan seorang pewaris empayar fesyen di tengah-tengah kesibukan kota Seoul.",
+                poster: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-pov-walking-down-a-crowded-neon-street-in-tokyo-43187-large.mp4"
+            },
+            {
+                id: 4,
+                title: "Shadow of the Ninja",
+                genre: "Aksi, Fantasi",
+                year: 2023,
+                rating: 4.7,
+                origin: "Jepun",
+                language: "Bahasa Jepun",
+                duration: "2j 10m",
+                director: "Takashi Miike",
+                cast: ["Kento Yamazaki", "Takeru Satoh", "Mei Nagano"],
+                overview: "Seorang ninja pelarian cuba menuntut bela atas kematian keluarganya, mendedahkan konspirasi mistik yang mengancam kestabilan kerajaan Shogun pada zaman Edo.",
+                poster: "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-man-practicing-swordsmanship-in-the-forest-41584-large.mp4"
+            },
+            {
+                id: 5,
+                title: "Bollywood Beats",
+                genre: "Komedi, Muzikal",
+                year: 2024,
+                rating: 4.3,
+                origin: "India",
+                language: "Bahasa Hindi",
+                duration: "2j 30m",
+                director: "Karan Johar",
+                cast: ["Ranbir Kapoor", "Alia Bhatt", "Shah Rukh Khan"],
+                overview: "Dua penari jalanan yang bercita-cita tinggi cuba merintis jalan ke pentas terbesar Mumbai, di samping menguruskan drama keluarga dan kawan-kawan yang huru-hara.",
+                poster: "https://images.unsplash.com/photo-1565120130276-dfbd9a7a3ad7?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-young-friends-dancing-at-a-music-festival-42295-large.mp4"
+            },
+            {
+                id: 6,
+                title: "The Midnight Forest",
+                genre: "Seram, Misteri",
+                year: 2023,
+                rating: 4.1,
+                origin: "United Kingdom",
+                language: "Bahasa Inggeris",
+                duration: "1j 35m",
+                director: "James Wan",
+                cast: ["Vera Farmiga", "Patrick Wilson", "Emily Blunt"],
+                overview: "Peneroka hutan terpencil mendapati pokok-pokok di situ berbisik pada waktu malam, menjebak mereka dalam mimpi buruk legenda kuno yang haus darah.",
+                poster: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-dark-haunted-forest-with-fog-34316-large.mp4"
+            },
+            {
+                id: 7,
+                title: "Cyberpunk Neo-Paris",
+                genre: "Sci-Fi, Aksi",
+                year: 2026,
+                rating: 4.6,
+                origin: "Perancis",
+                language: "Bahasa Perancis",
+                duration: "2j 05m",
+                director: "Denis Villeneuve",
+                cast: ["Léa Seydoux", "Timothée Chalamet", "Vincent Cassel"],
+                overview: "Di Paris versi masa hadapan yang dikuasai oleh AI dan korporat korup, seorang detektif siber terpaksa bersekutu dengan seorang penggodam pemberontak demi menyelamatkan dunia siber.",
+                poster: "https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-flying-over-a-futuristic-city-43152-large.mp4"
+            },
+            {
+                id: 8,
+                title: "Legasi Harimau Malaya",
+                genre: "Drama, Sukan",
+                year: 2025,
+                rating: 4.7,
+                origin: "Malaysia",
+                language: "Bahasa Melayu",
+                duration: "2j 00m",
+                director: "Adrian Teh",
+                cast: ["Shaheizy Sam", "Luqman Hafidz", "Sangeeta Krishnasamy"],
+                overview: "Kisah jatuh bangun skuad bola sepak kebangsaan dalam usaha melayakkan diri ke temasya sukan dunia terbesar, disokong oleh semangat perpaduan rakyat Malaysia.",
+                poster: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-stadium-lights-at-night-with-fog-34281-large.mp4"
+            },
+            {
+                id: 9,
+                title: "The Lost Pyramid",
+                genre: "Pengembaraan, Misteri",
+                year: 2024,
+                rating: 4.4,
+                origin: "Mesir",
+                language: "Bahasa Arab / Inggeris",
+                duration: "1j 52m",
+                director: "Steven Spielberg",
+                cast: ["Rami Malek", "Tom Holland", "Zendaya"],
+                overview: "Ahli arkeologi menemui sebuah piramid rahsia di gurun Sahara yang tidak pernah direkodkan. Malangnya, mereka mengaktifkan perangkap kuno yang membawa malapetaka.",
+                poster: "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&q=80&w=600",
+                backdrop: "https://images.unsplash.com/photo-1503177119275-0aa32b31d468?auto=format&fit=crop&q=80&w=1600",
+                videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-scenic-view-of-the-giza-pyramids-in-egypt-42475-large.mp4"
+            }
+        ];
+
+        // Memori ulasan simulasi
+        let movieReviews = {
+            1: [
+                { user: "Farhan88", rating: 5, comment: "Sangat bangga dengan filem Malaysia! Aksi mantap dan nilai sejarah tinggi!" },
+                { user: "Melur_Kuala Lumpur", rating: 4, comment: "Persembahan lakonan Beto Kusyairy memang luar biasa." }
+            ],
+            2: [
+                { user: "CosmoGeek", rating: 5, comment: "Sinematografi dan runut bunyi Hans Zimmer paling gila! Filem wajib tonton berulang kali." }
+            ]
+        };
+
+        // Kawalan Selamat LocalStorage (Mencegah kerosakan akibat sekatan Sandbox)
+        function safeGetFavorites() {
+            try {
+                const stored = localStorage.getItem('movieManiaFavs');
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.warn("Penyimpanan lokal dihalang oleh pelayar web. Menggunakan memori sementara.");
+                return window.fallbackFavorites || [];
+            }
+        }
+
+        function safeSetFavorites(favs) {
+            window.fallbackFavorites = favs;
+            try {
+                localStorage.setItem('movieManiaFavs', JSON.stringify(favs));
+            } catch (e) {
+                console.warn("Gagal menyimpan ke localStorage disebabkan sekatan pelayar.");
+            }
+        }
+    </script>
+
+    <script>
+        // State management
+        let favorites = safeGetFavorites();
+        let currentSearchQuery = "";
+        let selectedGenre = "Semua";
+        let selectedOrigin = "Semua";
+        let activeMovieId = 1; // Default featured movie
+    </script>
+
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-nav bg-brand-darkBg/80 border-b border-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="resetFilters()">
+                    <div class="bg-brand-red text-white p-2.5 rounded-lg flex items-center justify-center font-black tracking-wider text-xl shadow-lg shadow-brand-red/30">
+                        <i class="fa-solid fa-film mr-1.5 animate-pulse"></i>M
+                    </div>
+                    <span class="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-brand-red tracking-tight">
+                        Movie<span class="text-brand-red">Mania</span>
+                    </span>
+                </div>
+
+                <!-- Nav Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-300">
+                    <a href="#hero-section" class="hover:text-brand-red transition-colors duration-200">Utama</a>
+                    <a href="#explore-section" class="hover:text-brand-red transition-colors duration-200">Katalog</a>
+                    <a href="#explore-section" onclick="setGenreFilter('Sci-Fi')" class="hover:text-brand-red transition-colors duration-200">Sci-Fi</a>
+                    <a href="#explore-section" onclick="setGenreFilter('Aksi')" class="hover:text-brand-red transition-colors duration-200">Aksi</a>
+                    <a href="#explore-section" onclick="setGenreFilter('Romantik')" class="hover:text-brand-red transition-colors duration-200">Romantik</a>
+                </div>
+
+                <!-- Right Side Tools -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search Input Direct in Nav (Desktop) -->
+                    <div class="relative hidden sm:block">
+                        <input type="text" id="nav-search" oninput="handleNavSearch(this.value)" placeholder="Cari filem dunia..." class="w-60 lg:w-80 bg-gray-900 text-white pl-10 pr-4 py-2 rounded-full border border-gray-800 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red text-xs transition-all duration-300">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-500 text-sm"></i>
+                    </div>
+
+                    <!-- Favorite Shortcut Link -->
+                    <button onclick="toggleMyListSidebar()" class="relative p-2.5 hover:bg-gray-800 rounded-full transition-colors group">
+                        <i class="fa-regular fa-heart text-xl group-hover:text-brand-red transition-colors"></i>
+                        <span id="fav-count" class="absolute -top-1 -right-1 bg-brand-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full scale-0 transition-transform duration-300">0</span>
+                    </button>
+
+                    <!-- Profile Avatar (Mock) -->
+                    <div class="flex items-center space-x-2 border-l border-gray-800 pl-4">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-red to-amber-500 flex items-center justify-center font-bold text-sm text-white border-2 border-gray-700">
+                            AZ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('custom-notification');
+            const content = document.getElementById('notif-content');
+            const icon = document.getElementById('notif-icon');
+            
+            if (type === 'success') {
+                notif.className = "fixed bottom-5 right-5 z-50 max-w-sm flex items-center p-4 rounded-xl shadow-2xl border bg-gray-900 border-green-500 text-white translate-y-10 opacity-0 transition-all duration-300";
+                icon.className = "fa-solid fa-circle-check text-green-500 text-xl mr-3";
+            } else {
+                notif.className = "fixed bottom-5 right-5 z-50 max-w-sm flex items-center p-4 rounded-xl shadow-2xl border bg-gray-900 border-brand-red text-white translate-y-10 opacity-0 transition-all duration-300";
+                icon.className = "fa-solid fa-circle-info text-brand-red text-xl mr-3";
+            }
+            
+            content.textContent = message;
+            notif.classList.remove('translate-y-10', 'opacity-0');
+            
+            setTimeout(() => {
+                notif.classList.add('translate-y-10', 'opacity-0');
+            }, 3000);
+        }
+
+        function updateFavCounter() {
+            const counter = document.getElementById('fav-count');
+            if (favorites.length > 0) {
+                counter.textContent = favorites.length;
+                counter.classList.remove('scale-0');
+                counter.classList.add('scale-100');
+            } else {
+                counter.classList.add('scale-0');
+                counter.classList.remove('scale-100');
+            }
+        }
+
+        function toggleFavorite(movieId, event) {
+            if (event) event.stopPropagation();
+            const id = parseInt(movieId);
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showNotification("Filem dialih keluar daripada kegemaran anda.", "info");
+            } else {
+                favorites.push(id);
+                showNotification("Filem ditambah ke senarai kegemaran anda!");
+            }
+            safeSetFavorites(favorites);
+            updateFavCounter();
+            renderMovies();
+            renderFavoritesList();
+            updateHeroButtons();
+        }
+
+        function updateHeroButtons() {
+            const currentHero = movieDatabase.find(m => m.id === activeMovieId);
+            if (!currentHero) return;
+            const heroFavBtn = document.getElementById('hero-fav-btn');
+            if (heroFavBtn) {
+                if (favorites.includes(currentHero.id)) {
+                    heroFavBtn.innerHTML = `<i class="fa-solid fa-check mr-2"></i>Senarai Saya`;
+                    heroFavBtn.classList.replace('bg-white/10', 'bg-brand-red');
+                    heroFavBtn.classList.replace('hover:bg-white/20', 'hover:bg-brand-red/80');
+                } else {
+                    heroFavBtn.innerHTML = `<i class="fa-solid fa-plus mr-2"></i>Senarai Saya`;
+                    heroFavBtn.classList.add('bg-white/10', 'hover:bg-white/20');
+                    heroFavBtn.classList.remove('bg-brand-red', 'hover:bg-brand-red/80');
+                }
+            }
+        }
+
+        function toggleMyListSidebar() {
+            const sidebar = document.getElementById('favorites-sidebar');
+            sidebar.classList.toggle('translate-x-full');
+        }
+    </script>
+
+    <section id="hero-section" class="relative min-h-[85vh] md:min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Hero Background Layer with Gradients -->
+        <div id="hero-backdrop" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out scale-105" style="background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=1600');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-darkBg via-brand-darkBg/60 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-darkBg via-brand-darkBg/30 to-transparent"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 py-12 md:py-24">
+            <div class="max-w-2xl space-y-6">
+                <!-- Origin & Rating -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <span id="hero-origin-badge" class="bg-brand-red text-white text-xs font-black tracking-widest px-3 py-1.5 rounded-md uppercase">PILIHAN MALAYSIAN</span>
+                    <div class="flex items-center bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-md border border-gray-800">
+                        <i class="fa-solid fa-star text-brand-accent mr-1.5 text-sm"></i>
+                        <span id="hero-rating" class="text-white text-xs font-bold">4.8</span>
+                    </div>
+                    <span id="hero-year-duration" class="text-gray-300 text-xs font-medium">2022 • 1j 58m</span>
+                </div>
+
+                <!-- Title -->
+                <h1 id="hero-title" class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-none text-white drop-shadow-lg">
+                    Mat Kilau: Kebangkitan Pahlawan
+                </h1>
+
+                <!-- Overview -->
+                <p id="hero-desc" class="text-base sm:text-lg text-gray-300 leading-relaxed max-w-xl drop-shadow">
+                    Mengisahkan perjuangan pahlawan Melayu terkemuka, Mat Kilau bersama rakan-rakannya menentang penjajah British di Pahang pada akhir abad ke-19.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                    <button id="hero-play-btn" onclick="openVideoPlayer(activeMovieId)" class="flex items-center justify-center bg-white text-black font-extrabold px-8 py-4 rounded-xl hover:bg-brand-accent hover:text-white transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-white/5">
+                        <i class="fa-solid fa-play text-lg mr-2.5"></i>Tonton Sekarang
+                    </button>
+                    <button id="hero-fav-btn" onclick="toggleFavorite(activeMovieId)" class="flex items-center justify-center bg-white/10 text-white font-semibold px-6 py-4 rounded-xl hover:bg-white/20 border border-white/10 transition-all duration-300 transform active:scale-95">
+                        <i class="fa-solid fa-plus mr-2"></i>Senarai Saya
+                    </button>
+                    <button id="hero-details-btn" onclick="openDetailsModal(activeMovieId)" class="flex items-center justify-center bg-gray-900/60 text-gray-300 font-semibold px-5 py-4 rounded-xl hover:bg-gray-800 border border-gray-800/80 transition-all duration-300">
+                        <i class="fa-solid fa-circle-info mr-2"></i>Maklumat lanjut
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Fading border -->
+        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-darkBg to-transparent"></div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 pb-24" id="explore-section">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight flex items-center">
+                    <span class="w-2.5 h-7 bg-brand-red rounded-full mr-3 inline-block"></span>
+                    Jelajahi Filem Dunia
+                </h2>
+                <p class="text-sm text-gray-400 mt-1">Saksikan seleksi sinematik terbaik global dari hujung jari anda.</p>
+            </div>
+            
+            <!-- Dynamic Category Buttons (Origins) -->
+            <div class="flex flex-wrap gap-2 text-xs font-semibold">
+                <button onclick="setOriginFilter('Semua')" id="origin-btn-Semua" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-brand-red text-white transition-all">Semua Global</button>
+                <button onclick="setOriginFilter('Malaysia')" id="origin-btn-Malaysia" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all">Malaysia</button>
+                <button onclick="setOriginFilter('Hollywood')" id="origin-btn-Hollywood" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all">Hollywood</button>
+                <button onclick="setOriginFilter('Korea Selatan')" id="origin-btn-Korea" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all">Korea</button>
+                <button onclick="setOriginFilter('Jepun')" id="origin-btn-Jepun" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all">Jepun</button>
+                <button onclick="setOriginFilter('India')" id="origin-btn-India" class="origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all">India</button>
+            </div>
+        </div>
+
+        <!-- Genre Bar and Search Row -->
+        <div class="bg-brand-cardBg/40 border border-gray-800/80 p-5 rounded-2xl mb-10 flex flex-col lg:flex-row items-center justify-between gap-6 backdrop-blur-sm">
+            <!-- Genre Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 scroll-smooth" id="genre-container">
+                <!-- Dynamic Genre Pills generated by JS -->
+            </div>
+
+            <!-- Dynamic Mobile Search -->
+            <div class="relative w-full lg:w-80">
+                <input type="text" id="main-search" oninput="handleSearch(this.value)" placeholder="Cari genre, tajuk, pelakon..." class="w-full bg-brand-darkBg text-white pl-11 pr-4 py-3 rounded-xl border border-gray-800 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red text-sm transition-all duration-300">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-500 text-base"></i>
+                <button id="clear-search" onclick="clearSearchInput()" class="hidden absolute right-4 top-3 text-gray-500 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Movie Catalog Grid -->
+        <div id="movie-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+            <!-- Dynamic Movie Cards generated by JS -->
+        </div>
+
+        <!-- No Results Visual -->
+        <div id="no-results" class="hidden flex-col items-center justify-center py-24 text-center">
+            <div class="w-24 h-24 bg-gray-900/60 rounded-full flex items-center justify-center text-4xl text-gray-600 mb-6">
+                <i class="fa-solid fa-video-slash"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Tiada Filem Ditemui</h3>
+            <p class="text-gray-400 max-w-md">Maaf, filem yang anda cari tiada dalam pangkalan data kami. Sila cuba cari menggunakan kata kunci yang berbeza.</p>
+            <button onclick="resetFilters()" class="mt-6 bg-brand-red hover:bg-brand-hoverRed text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors">Tunjukkan Semua Filem</button>
+        </div>
+
+    </main>
+
+    <script>
+        // Membina butang-butang genre yang interaktif secara dinamik
+        const genres = ["Semua", "Aksi", "Sci-Fi", "Romantik", "Drama", "Seram", "Pengembaraan", "Muzikal", "Komedi", "Sukan", "Misteri"];
+        
+        function renderGenrePills() {
+            const container = document.getElementById('genre-container');
+            container.innerHTML = "";
+            
+            genres.forEach(genre => {
+                const isActive = selectedGenre === genre;
+                const activeClasses = "bg-brand-red text-white shadow-lg shadow-brand-red/20";
+                const inactiveClasses = "bg-gray-900 text-gray-400 hover:bg-gray-800 hover:text-white";
+                
+                const pill = document.createElement('button');
+                pill.className = `px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-300 ${isActive ? activeClasses : inactiveClasses}`;
+                pill.textContent = genre;
+                pill.onclick = () => setGenreFilter(genre);
+                container.appendChild(pill);
+            });
+        }
+
+        // Penapisan & Pengaturan Filem
+        function setGenreFilter(genre) {
+            selectedGenre = genre;
+            renderGenrePills();
+            renderMovies();
+            // Scroll ke katalog filem secara automatik
+            document.getElementById('explore-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setOriginFilter(origin) {
+            selectedOrigin = origin;
+            // Update UI filter button states
+            document.querySelectorAll('.origin-btn').forEach(btn => {
+                btn.className = "origin-btn px-4 py-2 rounded-full border border-gray-800 bg-gray-900 text-gray-400 hover:text-white transition-all";
+            });
+            
+            let activeBtnId = 'origin-btn-Semua';
+            if (origin === 'Malaysia') activeBtnId = 'origin-btn-Malaysia';
+            else if (origin === 'Hollywood') activeBtnId = 'origin-btn-Hollywood';
+            else if (origin === 'Korea Selatan') activeBtnId = 'origin-btn-Korea';
+            else if (origin === 'Jepun') activeBtnId = 'origin-btn-Jepun';
+            else if (origin === 'India') activeBtnId = 'origin-btn-India';
+
+            const activeBtn = document.getElementById(activeBtnId);
+            if (activeBtn) {
+                activeBtn.className = "origin-btn px-4 py-2 rounded-full border border-gray-800 bg-brand-red text-white transition-all shadow-lg shadow-brand-red/20";
+            }
+
+            renderMovies();
+        }
+
+        function handleSearch(val) {
+            currentSearchQuery = val.trim().toLowerCase();
+            const clearBtn = document.getElementById('clear-search');
+            if (currentSearchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderMovies();
+        }
+
+        function handleNavSearch(val) {
+            currentSearchQuery = val.trim().toLowerCase();
+            const mainSearch = document.getElementById('main-search');
+            if (mainSearch) mainSearch.value = val;
+            
+            const clearBtn = document.getElementById('clear-search');
+            if (currentSearchQuery.length > 0 && clearBtn) {
+                clearBtn.classList.remove('hidden');
+            } else if (clearBtn) {
+                clearBtn.classList.add('hidden');
+            }
+            
+            renderMovies();
+        }
+
+        function clearSearchInput() {
+            document.getElementById('main-search').value = "";
+            document.getElementById('nav-search').value = "";
+            document.getElementById('clear-search').classList.add('hidden');
+            currentSearchQuery = "";
+            renderMovies();
+        }
+
+        function resetFilters() {
+            selectedGenre = "Semua";
+            selectedOrigin = "Semua";
+            currentSearchQuery = "";
+            document.getElementById('main-search').value = "";
+            document.getElementById('nav-search').value = "";
+            document.getElementById('clear-search').classList.add('hidden');
+            
+            renderGenrePills();
+            setOriginFilter("Semua");
+        }
+
+        // Render Filem ke Grid Utama
+        function renderMovies() {
+            const grid = document.getElementById('movie-grid');
+            const noResults = document.getElementById('no-results');
+            grid.innerHTML = "";
+
+            const filtered = movieDatabase.filter(movie => {
+                // Tapis mengikut Genre
+                const matchesGenre = selectedGenre === "Semua" || movie.genre.includes(selectedGenre);
+                // Tapis mengikut Negara Asal
+                const matchesOrigin = selectedOrigin === "Semua" || movie.origin === selectedOrigin;
+                // Tapis mengikut Terma Carian
+                const matchesSearch = currentSearchQuery === "" || 
+                    movie.title.toLowerCase().includes(currentSearchQuery) || 
+                    movie.genre.toLowerCase().includes(currentSearchQuery) ||
+                    movie.overview.toLowerCase().includes(currentSearchQuery) ||
+                    movie.origin.toLowerCase().includes(currentSearchQuery) ||
+                    movie.cast.some(actor => actor.toLowerCase().includes(currentSearchQuery));
+
+                return matchesGenre && matchesOrigin && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                noResults.classList.add('flex');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            noResults.classList.remove('flex');
+            noResults.classList.add('hidden');
+
+            filtered.forEach(movie => {
+                const isFav = favorites.includes(movie.id);
+                const favIconClass = isFav ? "fa-solid fa-heart text-brand-red" : "fa-regular fa-heart text-white hover:text-brand-red";
+
+                const card = document.createElement('div');
+                card.className = "group relative bg-brand-cardBg rounded-2xl overflow-hidden border border-gray-800/40 hover:border-brand-red/40 transition-all duration-300 hover:shadow-2xl hover:shadow-brand-red/5 flex flex-col justify-between cursor-pointer movie-card transform hover:-translate-y-2";
+                card.onclick = () => openDetailsModal(movie.id);
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[2/3]">
+                        <!-- Poster Image with lazy fallback -->
+                        <img src="${movie.poster}" alt="${movie.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x600/1A1A22/FFFFFF?text=${encodeURIComponent(movie.title)}'">
+                        
+                        <!-- Country Origin Badge -->
+                        <span class="absolute top-3 left-3 bg-brand-darkBg/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md border border-gray-800">
+                            ${movie.origin}
+                        </span>
+
+                        <!-- Favorite Action Button Overlay -->
+                        <button onclick="toggleFavorite(${movie.id}, event)" class="absolute top-3 right-3 p-2 bg-brand-darkBg/80 backdrop-blur-md rounded-xl border border-gray-800/80 hover:bg-brand-red hover:border-brand-red group/btn transition-all duration-300">
+                            <i class="${favIconClass} text-xs transition-colors"></i>
+                        </button>
+
+                        <!-- Hover overlay with Play Button -->
+                        <div class="movie-overlay absolute inset-0 bg-brand-darkBg/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] text-brand-accent font-extrabold uppercase bg-brand-accent/10 px-2 py-0.5 rounded border border-brand-accent/20">
+                                    <i class="fa-solid fa-star mr-1"></i>${movie.rating}
+                                </span>
+                                <span class="text-[10px] text-gray-400 font-semibold">${movie.duration}</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-white leading-tight mb-2 truncate">${movie.title}</h4>
+                            <p class="text-[10px] text-gray-400 line-clamp-3 mb-3 leading-relaxed">${movie.overview}</p>
+                            <div class="flex gap-2">
+                                <button onclick="openVideoPlayer(${movie.id}, event)" class="flex-1 bg-brand-red hover:bg-brand-hoverRed text-white text-xs font-bold py-2 rounded-lg text-center flex items-center justify-center gap-1.5 transition-colors">
+                                    <i class="fa-solid fa-play text-[9px]"></i> Main
+                                </button>
+                                <button onclick="openDetailsModal(${movie.id}, event)" class="p-2 bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold rounded-lg text-center flex items-center justify-center transition-colors">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer Label (visible initially on mobile or desktop) -->
+                    <div class="p-3 bg-brand-cardBg border-t border-gray-800/20 group-hover:border-brand-red/20 transition-all">
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-200 group-hover:text-white transition-colors truncate mb-1">${movie.title}</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] sm:text-xs text-gray-500 font-medium">${movie.year} • ${movie.genre.split(',')[0]}</span>
+                            <span class="text-[10px] sm:text-xs text-brand-accent font-extrabold flex items-center"><i class="fa-solid fa-star mr-1 text-[9px]"></i>${movie.rating}</span>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Tukar Feature Banner Utama (Hero)
+        function changeHeroBanner(movieId) {
+            const movie = movieDatabase.find(m => m.id === movieId);
+            if (!movie) return;
+            activeMovieId = movie.id;
+
+            const backdrop = document.getElementById('hero-backdrop');
+            const originBadge = document.getElementById('hero-origin-badge');
+            const rating = document.getElementById('hero-rating');
+            const yearDur = document.getElementById('hero-year-duration');
+            const title = document.getElementById('hero-title');
+            const desc = document.getElementById('hero-desc');
+
+            backdrop.style.backgroundImage = `url('${movie.backdrop}')`;
+            originBadge.textContent = movie.origin;
+            rating.textContent = movie.rating;
+            yearDur.textContent = `${movie.year} • ${movie.duration}`;
+            title.textContent = movie.title;
+            desc.textContent = movie.overview;
+
+            updateHeroButtons();
+        }
+    </script>
+
+    <!-- 1. Detail Modal -->
+    <div id="details-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 text-center bg-black/80 backdrop-blur-md">
+            <!-- Modal Box -->
+            <div class="relative bg-brand-cardBg rounded-3xl overflow-hidden shadow-2xl max-w-4xl w-full text-left border border-gray-800 animate-in fade-in zoom-in duration-300 flex flex-col">
+                <!-- Close Button -->
+                <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-black/60 hover:bg-brand-red rounded-full flex items-center justify-center border border-gray-800 text-white transition-all">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+
+                <!-- Modal Banner Background -->
+                <div class="relative h-64 md:h-96">
+                    <img id="modal-backdrop" src="" alt="Backdrop" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-cardBg via-brand-cardBg/40 to-transparent"></div>
+                    
+                    <!-- Content Over Banner -->
+                    <div class="absolute bottom-6 left-6 right-6 flex items-end gap-6">
+                        <div class="hidden md:block w-36 h-52 bg-gray-900 rounded-xl overflow-hidden border-2 border-gray-800 shadow-2xl flex-shrink-0">
+                            <img id="modal-poster" src="" alt="Poster" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-grow space-y-2">
+                            <span id="modal-origin" class="bg-brand-red text-white text-[10px] font-black tracking-widest px-2.5 py-1 rounded-md uppercase">MALAYSIA</span>
+                            <h2 id="modal-title" class="text-2xl sm:text-4xl font-extrabold text-white leading-tight"></h2>
+                            <p id="modal-meta" class="text-xs text-gray-300 font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Body Content -->
+                <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Column 1: Info & Sinopsis -->
+                    <div class="md:col-span-2 space-y-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="w-1.5 h-4 bg-brand-red rounded-full"></span>Sinopsis
+                            </h3>
+                            <p id="modal-overview" class="text-gray-300 text-sm leading-relaxed"></p>
+                        </div>
+
+                        <!-- Cast & Director -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gray-800/60">
+                            <div>
+                                <span class="text-xs text-gray-500 block font-semibold">Pengarah</span>
+                                <span id="modal-director" class="text-sm text-gray-200 font-bold"></span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-gray-500 block font-semibold">Barisan Pelakon</span>
+                                <span id="modal-cast" class="text-sm text-gray-200 font-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Buttons -->
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button id="modal-play-btn" class="flex-1 bg-brand-red hover:bg-brand-hoverRed text-white font-extrabold py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm shadow-lg shadow-brand-red/20 transition-all duration-200 transform hover:scale-102">
+                                <i class="fa-solid fa-play text-xs"></i> Tonton Sekarang
+                            </button>
+                            <button id="modal-fav-btn" class="px-5 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl border border-gray-700 transition-colors">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Reviews / Feedback System -->
+                    <div class="bg-gray-900/40 border border-gray-800/80 p-5 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-md font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-brand-red"></i> Ulasan Mania
+                            </h3>
+                            
+                            <!-- Reviews List -->
+                            <div id="modal-reviews-list" class="space-y-3 max-h-48 overflow-y-auto mb-4 pr-1">
+                                <!-- Dynamic reviews go here -->
+                            </div>
+                        </div>
+
+                        <!-- Add Review Form -->
+                        <form id="review-form" onsubmit="handleReviewSubmit(event)" class="border-t border-gray-800/80 pt-4 mt-2">
+                            <span class="text-xs text-gray-400 font-bold block mb-2">Tinggalkan Ulasan Anda</span>
+                            <div class="flex gap-1 mb-2 text-gray-500" id="star-rating-selector">
+                                <i class="fa-solid fa-star cursor-pointer hover:text-brand-accent text-sm" onclick="setFormStars(1)"></i>
+                                <i class="fa-solid fa-star cursor-pointer hover:text-brand-accent text-sm" onclick="setFormStars(2)"></i>
+                                <i class="fa-solid fa-star cursor-pointer hover:text-brand-accent text-sm" onclick="setFormStars(3)"></i>
+                                <i class="fa-solid fa-star cursor-pointer hover:text-brand-accent text-sm" onclick="setFormStars(4)"></i>
+                                <i class="fa-solid fa-star cursor-pointer hover:text-brand-accent text-sm" onclick="setFormStars(5)"></i>
+                            </div>
+                            <input type="text" id="review-user" placeholder="Nama anda" class="w-full bg-brand-darkBg text-xs text-white px-3 py-2 rounded-lg border border-gray-800 mb-2 focus:outline-none focus:border-brand-red" required>
+                            <textarea id="review-comment" placeholder="Tulis pendapat anda..." class="w-full bg-brand-darkBg text-xs text-white px-3 py-2 rounded-lg border border-gray-800 mb-2 focus:outline-none focus:border-brand-red h-14 resize-none" required></textarea>
+                            <button type="submit" class="w-full bg-white hover:bg-brand-accent hover:text-white text-brand-darkBg font-extrabold text-xs py-2 rounded-lg transition-colors">Hantar Ulasan</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Cinematic Video Player Modal -->
+    <div id="player-modal" class="fixed inset-0 z-50 bg-black flex items-center justify-center hidden">
+        <!-- Close Player Button -->
+        <button onclick="closeVideoPlayer()" class="absolute top-6 right-6 z-50 w-12 h-12 bg-white/10 hover:bg-brand-red rounded-full flex items-center justify-center border border-white/10 text-white transition-all">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+
+        <div class="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800/80 group">
+            <video id="cinema-video" class="w-full h-full object-cover cursor-pointer" src=""></video>
+            
+            <!-- Custom Controller Overlay (Glow & Interactive Controls) -->
+            <div id="player-controls" class="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/40 flex flex-col justify-between p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <!-- Top Info -->
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-brand-red font-black tracking-widest uppercase">MovieMania Cinema Player</span>
+                        <h4 id="player-movie-title" class="text-lg font-bold text-white">Mat Kilau</h4>
+                    </div>
+                    <span class="text-xs bg-brand-red text-white font-bold px-2 py-1 rounded">ULTRA HD 4K</span>
+                </div>
+
+                <!-- Bottom Controls Area -->
+                <div class="space-y-4">
+                    <!-- Progress Bar -->
+                    <div class="flex items-center gap-3">
+                        <span id="player-current-time" class="text-xs text-gray-400 font-mono">0:00</span>
+                        <div id="progress-bar-container" class="relative flex-grow h-1.5 bg-gray-700/50 rounded-full cursor-pointer overflow-hidden" onclick="seekVideo(event)">
+                            <div id="progress-bar-fill" class="h-full bg-brand-red w-0 transition-all duration-100"></div>
+                        </div>
+                        <span id="player-duration" class="text-xs text-gray-400 font-mono">0:00</span>
+                    </div>
+
+                    <!-- Action Row -->
+                    <div class="flex items-center justify-between">
+                        <!-- Play, Rewind, FastForward -->
+                        <div class="flex items-center gap-6">
+                            <button onclick="rewindVideo()" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-solid fa-backward-10"></i></button>
+                            <button id="player-play-btn" onclick="togglePlayVideo()" class="w-12 h-12 bg-white text-black hover:bg-brand-red hover:text-white rounded-full flex items-center justify-center text-lg shadow-lg transition-all duration-200 transform active:scale-95">
+                                <i class="fa-solid fa-play ml-0.5"></i>
+                            </button>
+                            <button onclick="forwardVideo()" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-solid fa-forward-10"></i></button>
+                            
+                            <!-- Volume Controls -->
+                            <div class="flex items-center gap-2 pl-4 border-l border-gray-800">
+                                <button onclick="toggleMuteVideo()" id="player-volume-btn" class="text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-volume-high"></i></button>
+                                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" oninput="changeVolume(this.value)" class="w-20 accent-brand-red h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Screen & Options -->
+                        <div class="flex items-center gap-4">
+                            <button onclick="toggleFullscreen()" class="text-gray-400 hover:text-white transition-colors text-lg"><i class="fa-solid fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let formRating = 5;
+
+        function setFormStars(rating) {
+            formRating = rating;
+            const stars = document.querySelectorAll('#star-rating-selector i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.className = "fa-solid fa-star text-brand-accent cursor-pointer";
+                } else {
+                    star.className = "fa-solid fa-star text-gray-600 cursor-pointer hover:text-brand-accent";
+                }
+            });
+        }
+
+        function openDetailsModal(movieId, event) {
+            if (event) event.stopPropagation();
+            const movie = movieDatabase.find(m => m.id === parseInt(movieId));
+            if (!movie) return;
+
+            // Load values to Modal
+            document.getElementById('modal-backdrop').src = movie.backdrop;
+            document.getElementById('modal-poster').src = movie.poster;
+            document.getElementById('modal-origin').textContent = movie.origin;
+            document.getElementById('modal-title').textContent = movie.title;
+            document.getElementById('modal-meta').textContent = `${movie.year} • ${movie.duration} • ${movie.genre}`;
+            document.getElementById('modal-overview').textContent = movie.overview;
+            document.getElementById('modal-director').textContent = movie.director;
+            document.getElementById('modal-cast').textContent = movie.cast.join(', ');
+
+            // Play Button action
+            const playBtn = document.getElementById('modal-play-btn');
+            playBtn.onclick = () => {
+                closeDetailsModal();
+                openVideoPlayer(movie.id);
+            };
+
+            // Favorite Button action update
+            const favBtn = document.getElementById('modal-fav-btn');
+            const updateModalFavBtn = () => {
+                if (favorites.includes(movie.id)) {
+                    favBtn.innerHTML = `<i class="fa-solid fa-heart text-brand-red"></i>`;
+                } else {
+                    favBtn.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+                }
+            };
+            updateModalFavBtn();
+            favBtn.onclick = () => {
+                toggleFavorite(movie.id);
+                updateModalFavBtn();
+            };
+
+            // Review Form setup
+            setFormStars(5);
+            document.getElementById('review-user').value = "";
+            document.getElementById('review-comment').value = "";
+            document.getElementById('review-form').setAttribute('data-movie-id', movie.id);
+
+            // Render Reviews
+            renderModalReviews(movie.id);
+
+            // Show Modal with fading effect
+            const modal = document.getElementById('details-modal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-y-hidden'); // Lock scroll background
+        }
+
+        function closeDetailsModal() {
+            const modal = document.getElementById('details-modal');
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-y-hidden');
+        }
+
+        function renderModalReviews(movieId) {
+            const container = document.getElementById('modal-reviews-list');
+            container.innerHTML = "";
+            const reviews = movieReviews[movieId] || [];
+
+            if (reviews.length === 0) {
+                container.innerHTML = `<div class="text-xs text-gray-500 py-4 text-center">Tiada ulasan lagi. Jadi yang pertama memberi pendapat!</div>`;
+                return;
+            }
+
+            reviews.forEach(review => {
+                let starsHtml = "";
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= review.rating) {
+                        starsHtml += `<i class="fa-solid fa-star text-[9px] text-brand-accent"></i>`;
+                    } else {
+                        starsHtml += `<i class="fa-solid fa-star text-[9px] text-gray-800"></i>`;
+                    }
+                }
+
+                const reviewEl = document.createElement('div');
+                reviewEl.className = "bg-brand-darkBg/60 p-3 rounded-xl border border-gray-800/40";
+                reviewEl.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-300">@${review.user}</span>
+                        <div class="flex gap-0.5">${starsHtml}</div>
+                    </div>
+                    <p class="text-[11px] text-gray-400 leading-snug">${review.comment}</p>
+                `;
+                container.appendChild(reviewEl);
+            });
+            // Auto-scroll reviews to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function handleReviewSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('review-form');
+            const movieId = parseInt(form.getAttribute('data-movie-id'));
+            const user = document.getElementById('review-user').value.trim();
+            const comment = document.getElementById('review-comment').value.trim();
+
+            if (!user || !comment) return;
+
+            if (!movieReviews[movieId]) {
+                movieReviews[movieId] = [];
+            }
+
+            // Simpan ulasan baru
+            movieReviews[movieId].push({
+                user: user,
+                rating: formRating,
+                comment: comment
+            });
+
+            // Refresh list
+            renderModalReviews(movieId);
+            showNotification("Ulasan anda telah dihantar!");
+
+            // Reset Form inputs
+            document.getElementById('review-user').value = "";
+            document.getElementById('review-comment').value = "";
+            setFormStars(5);
+        }
+    </script>
+
+    <script>
+        const video = document.getElementById('cinema-video');
+        const playBtn = document.getElementById('player-play-btn');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const currentTimeEl = document.getElementById('player-current-time');
+        const durationEl = document.getElementById('player-duration');
+        const volumeBtn = document.getElementById('player-volume-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        function openVideoPlayer(movieId, event) {
+            if (event) event.stopPropagation();
+            const movie = movieDatabase.find(m => m.id === parseInt(movieId));
+            if (!movie) return;
+
+            document.getElementById('player-movie-title').textContent = movie.title;
+            video.src = movie.videoUrl;
+            
+            // Show Player Modal
+            const playerModal = document.getElementById('player-modal');
+            playerModal.classList.remove('hidden');
+            document.body.classList.add('overflow-y-hidden');
+
+            // Play Video on loaded
+            video.play().then(() => {
+                playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+            }).catch(err => {
+                console.log("Auto-play blocked by browser. User interaction needed.");
+            });
+
+            // Set default events
+            video.addEventListener('timeupdate', updateVideoProgress);
+            video.addEventListener('loadedmetadata', setVideoDuration);
+        }
+
+        function closeVideoPlayer() {
+            video.pause();
+            video.src = "";
+            document.getElementById('player-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-y-hidden');
+        }
+
+        function togglePlayVideo() {
+            if (video.paused) {
+                video.play();
+                playBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+            } else {
+                video.pause();
+                playBtn.innerHTML = `<i class="fa-solid fa-play ml-0.5"></i>`;
+            }
+        }
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function updateVideoProgress() {
+            if (video.duration) {
+                const percentage = (video.currentTime / video.duration) * 100;
+                progressBarFill.style.width = `${percentage}%`;
+                currentTimeEl.textContent = formatTime(video.currentTime);
+            }
+        }
+
+        function setVideoDuration() {
+            durationEl.textContent = formatTime(video.duration);
+        }
+
+        function seekVideo(event) {
+            const container = document.getElementById('progress-bar-container');
+            const rect = container.getBoundingClientRect();
+            const clickPosition = (event.clientX - rect.left) / rect.width;
+            video.currentTime = clickPosition * video.duration;
+        }
+
+        function rewindVideo() {
+            video.currentTime = Math.max(0, video.currentTime - 10);
+        }
+
+        function forwardVideo() {
+            video.currentTime = Math.min(video.duration, video.currentTime + 10);
+        }
+
+        function changeVolume(value) {
+            video.volume = value;
+            if (value === "0") {
+                volumeBtn.innerHTML = `<i class="fa-solid fa-volume-mute"></i>`;
+            } else if (value < 0.5) {
+                volumeBtn.innerHTML = `<i class="fa-solid fa-volume-low"></i>`;
+            } else {
+                volumeBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+            }
+        }
+
+        function toggleMuteVideo() {
+            if (video.muted) {
+                video.muted = false;
+                volumeSlider.value = video.volume;
+                changeVolume(video.volume);
+            } else {
+                video.muted = true;
+                volumeSlider.value = 0;
+                volumeBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                video.parentElement.requestFullscreen().catch(err => {
+                    console.error("Fullscreen error", err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+
+    <!-- Drawer Menu for Favorites -->
+    <div id="favorites-sidebar" class="fixed top-0 right-0 h-full w-80 md:w-96 bg-brand-cardBg border-l border-gray-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+        <!-- Sidebar Header -->
+        <div class="p-6 border-b border-gray-800 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-heart text-brand-red animate-pulse"></i> Senarai Saya
+            </h3>
+            <button onclick="toggleMyListSidebar()" class="p-2 hover:bg-gray-800 rounded-full text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="flex-grow overflow-y-auto p-6 space-y-4" id="favorites-list-container">
+            <!-- Dynamic favorites cards show here -->
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-6 border-t border-gray-800 bg-brand-darkBg/60">
+            <button onclick="resetFilters(); toggleMyListSidebar();" class="w-full bg-brand-red hover:bg-brand-hoverRed text-white text-xs font-bold py-3.5 rounded-xl transition-colors">
+                Jelajahi Filem Lebih Banyak
+            </button>
+        </div>
+    </div>
+
+    <div id="custom-notification" class="fixed bottom-5 right-5 z-50 max-w-sm flex items-center p-4 rounded-xl shadow-2xl border bg-gray-900 border-green-500 text-white translate-y-10 opacity-0 transition-all duration-300">
+        <i id="notif-icon" class="fa-solid fa-circle-check text-green-500 text-xl mr-3"></i>
+        <span id="notif-content" class="text-xs font-semibold">Berjaya menambah ulasan!</span>
+    </div>
+
+    <script>
+        function renderFavoritesList() {
+            const container = document.getElementById('favorites-list-container');
+            container.innerHTML = "";
+
+            if (favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="h-64 flex flex-col items-center justify-center text-center">
+                        <i class="fa-regular fa-heart text-gray-700 text-4xl mb-4"></i>
+                        <p class="text-sm text-gray-500">Senarai kegemaran anda kosong.</p>
+                        <p class="text-[11px] text-gray-600 mt-1">Suka sebarang filem? Tekan ikon hati di poster filem!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            favorites.forEach(id => {
+                const movie = movieDatabase.find(m => m.id === id);
+                if (!movie) return;
+
+                const card = document.createElement('div');
+                card.className = "flex gap-4 p-3 bg-brand-darkBg/60 border border-gray-800 rounded-xl hover:border-gray-700 transition-colors cursor-pointer group";
+                card.onclick = () => {
+                    toggleMyListSidebar();
+                    openDetailsModal(movie.id);
+                };
+
+                card.innerHTML = `
+                    <img src="${movie.poster}" alt="${movie.title}" class="w-14 h-20 object-cover rounded-lg border border-gray-800">
+                    <div class="flex-grow flex flex-col justify-between overflow-hidden">
+                        <div>
+                            <h4 class="text-xs font-bold text-white group-hover:text-brand-red transition-colors truncate mb-0.5">${movie.title}</h4>
+                            <span class="text-[10px] text-gray-500 block">${movie.origin} • ${movie.genre.split(',')[0]}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] text-brand-accent font-extrabold"><i class="fa-solid fa-star mr-1"></i>${movie.rating}</span>
+                            <button onclick="toggleFavorite(${movie.id}, event)" class="text-xs text-gray-500 hover:text-brand-red transition-colors p-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+
+    <footer class="bg-brand-darkBg border-t border-gray-900/80 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-brand-red text-white p-2 rounded-lg flex items-center justify-center font-black tracking-wider text-md">
+                            M
+                        </div>
+                        <span class="text-xl font-black text-white">Movie<span class="text-brand-red">Mania</span></span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Platform pencarian filem terunggul anda dari serata dunia. Nikmati visual sinematik tanpa batasan tempat dan waktu.
+                    </p>
+                </div>
+
+                <!-- Fast Links -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Navigasi Pantas</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><a href="#hero-section" class="hover:text-white transition-colors">Utama</a></li>
+                        <li><a href="#explore-section" class="hover:text-white transition-colors">Katalog Global</a></li>
+                        <li><a href="#explore-section" onclick="setOriginFilter('Malaysia')" class="hover:text-white transition-colors">Karya Tempatan (Malaysia)</a></li>
+                        <li><button onclick="toggleMyListSidebar()" class="hover:text-white transition-colors text-left">Senarai Saya</button></li>
+                    </ul>
+                </div>
+
+                <!-- Genres Footer -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Genre Popular</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><a href="#explore-section" onclick="setGenreFilter('Aksi')" class="hover:text-white transition-colors">Aksi & Sejarah</a></li>
+                        <li><a href="#explore-section" onclick="setGenreFilter('Sci-Fi')" class="hover:text-white transition-colors">Sains Fiksyen</a></li>
+                        <li><a href="#explore-section" onclick="setGenreFilter('Romantik')" class="hover:text-white transition-colors">K-Drama & Romantik</a></li>
+                        <li><a href="#explore-section" onclick="setGenreFilter('Seram')" class="hover:text-white transition-colors">Misteri & Seram</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter/Contact -->
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Langgan Berita Filem</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Dapatkan info terkini dan tarikh rilis filem blockbuster dunia terus ke e-mel anda.</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="E-mel anda" class="bg-gray-900 border border-gray-800 text-xs px-3 py-2.5 rounded-lg focus:outline-none focus:border-brand-red text-white w-full">
+                        <button onclick="showNotification('Berjaya dilanggan!')" class="bg-brand-red hover:bg-brand-hoverRed text-white px-4 py-2.5 rounded-lg text-xs font-bold transition-colors">Hantar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-[11px] text-gray-600">
+                    &copy; 2026 MovieMania. Hak Cipta Terpelihara. Dibina untuk para pencinta filem global.
+                </p>
+                <!-- Social media icons -->
+                <div class="flex space-x-4 text-gray-500">
+                    <a href="#" class="hover:text-brand-red transition-colors"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                    <a href="#" class="hover:text-brand-red transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
+                    <a href="#" class="hover:text-brand-red transition-colors"><i class="fa-brands fa-twitter text-sm"></i></a>
+                    <a href="#" class="hover:text-brand-red transition-colors"><i class="fa-brands fa-youtube text-sm"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Memulakan data sebaik sahaja tetingkap diload
+        window.onload = function () {
+            // Render elemen
+            renderGenrePills();
+            renderMovies();
+            updateFavCounter();
+            renderFavoritesList();
+            
+            // Set Hero Banner pertama sebagai permulaan (Mat Kilau)
+            changeHeroBanner(1);
+
+            // Ganti tab navigasi berdasarkan skrol halaman
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('bg-brand-darkBg', 'shadow-2xl');
+                    nav.classList.remove('bg-brand-darkBg/80');
+                } else {
+                    nav.classList.add('bg-brand-darkBg/80');
+                    nav.classList.remove('bg-brand-darkBg', 'shadow-2xl');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
