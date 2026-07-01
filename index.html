@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjana Pakaian Harian (OOTD)</title>
+    <!-- Tailwind CSS untuk gayaan yang moden dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons untuk ikon yang kemas -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Kesan transisi lembut */
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navigasi / Pengepala -->
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl text-slate-900 tracking-tight">GayaHarian</h1>
+                    <p class="text-xs text-slate-500">Penjana & Pengurus OOTD Pintar</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 font-medium rounded-full flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Sedia Menjana
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Kandungan Utama -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Bahagian Kiri: Penjana OOTD (6 Kolum di Skrin Besar) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            <!-- Kad Penjana Utama -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col gap-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="font-bold text-lg text-slate-900">Penjana Kombinasi</h2>
+                        <p class="text-sm text-slate-500">Biarkan sistem memilih padanan terbaik untuk hari ini.</p>
+                    </div>
+                    <!-- Pilihan Acara / Cuaca -->
+                    <div class="flex flex-col gap-1 items-end">
+                        <label for="occasionFilter" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Acara</label>
+                        <select id="occasionFilter" class="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="semua">Semua Acara</option>
+                            <option value="kasual">Santai / Kasual</option>
+                            <option value="pejabat">Pejabat / Kerja</option>
+                            <option value="sukan">Sukan / Aktif</option>
+                            <option value="formal">Formal / Acara Khas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Paparan Hasil Kombinasi -->
+                <div class="grid grid-cols-2 gap-4 my-2" id="outfitDisplayArea">
+                    <!-- Top (Baju) -->
+                    <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center relative group min-h-[140px] smooth-transition" id="slot-baju">
+                        <span class="text-xs font-semibold text-slate-400 absolute top-3 left-3 uppercase tracking-wider">Baju</span>
+                        <div class="text-4xl mb-2" id="slot-baju-emoji">👕</div>
+                        <h4 class="font-bold text-sm text-slate-800" id="slot-baju-nama">T-Shirt Asas</h4>
+                        <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mt-1 hidden sm:inline-block" id="slot-baju-tag">Kasual</span>
+                    </div>
+
+                    <!-- Bottom (Seluar) -->
+                    <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center relative group min-h-[140px] smooth-transition" id="slot-seluar">
+                        <span class="text-xs font-semibold text-slate-400 absolute top-3 left-3 uppercase tracking-wider">Seluar</span>
+                        <div class="text-4xl mb-2" id="slot-seluar-emoji">👖</div>
+                        <h4 class="font-bold text-sm text-slate-800" id="slot-seluar-nama">Jeans Biru</h4>
+                        <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mt-1 hidden sm:inline-block" id="slot-seluar-tag">Kasual</span>
+                    </div>
+
+                    <!-- Shoes (Kasut) -->
+                    <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center relative group min-h-[140px] smooth-transition" id="slot-kasut">
+                        <span class="text-xs font-semibold text-slate-400 absolute top-3 left-3 uppercase tracking-wider">Kasut</span>
+                        <div class="text-4xl mb-2" id="slot-kasut-emoji">👟</div>
+                        <h4 class="font-bold text-sm text-slate-800" id="slot-kasut-nama">Sneakers Putih</h4>
+                        <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mt-1 hidden sm:inline-block" id="slot-kasut-tag">Kasual</span>
+                    </div>
+
+                    <!-- Accessories (Aksesori) -->
+                    <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 flex flex-col items-center justify-center text-center relative group min-h-[140px] smooth-transition" id="slot-aksesori">
+                        <span class="text-xs font-semibold text-slate-400 absolute top-3 left-3 uppercase tracking-wider">Aksesori</span>
+                        <div class="text-4xl mb-2" id="slot-aksesori-emoji">🕶️</div>
+                        <h4 class="font-bold text-sm text-slate-800" id="slot-aksesori-nama">Cermin Mata Hitam</h4>
+                        <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mt-1 hidden sm:inline-block" id="slot-aksesori-tag">Kasual</span>
+                    </div>
+                </div>
+
+                <!-- Butang Kawalan Generator -->
+                <div class="flex gap-3">
+                    <button onclick="janaPakaian()" class="flex-grow bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-100 hover:shadow-xl hover:shadow-indigo-200 flex items-center justify-center gap-2 smooth-transition active:scale-95">
+                        <i data-lucide="refresh-cw" class="w-5 h-5" id="btn-jana-ikon"></i>
+                        <span>Jana Kombinasi (OOTD)</span>
+                    </button>
+                    <button onclick="simpanOOTDKegemaran()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100 font-semibold p-3.5 rounded-xl smooth-transition active:scale-95 flex items-center justify-center gap-1.5" title="Simpan Kombinasi">
+                        <i data-lucide="heart" class="w-5 h-5"></i>
+                        <span class="hidden sm:inline">Suka</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Koleksi OOTD Tersimpan -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Koleksi OOTD Pilihan</h3>
+                        <p class="text-xs text-slate-500">Kombinasi kegemaran anda yang telah disimpan.</p>
+                    </div>
+                    <span id="savedCount" class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-full">0 Kombinasi</span>
+                </div>
+                
+                <!-- Senarai Tersimpan -->
+                <div id="savedOutfitsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[280px] overflow-y-auto pr-1">
+                    <!-- Template Kosong jika tiada data -->
+                    <div id="noSavedPrompt" class="col-span-2 py-8 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
+                        <i data-lucide="heart-off" class="w-8 h-8 text-slate-300"></i>
+                        <p class="text-sm">Tiada OOTD kegemaran lagi. Tekan butang 'Suka' di atas!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bahagian Kanan: Pengurusan Wardrobe (5 Kolum di Skrin Besar) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <!-- Tambah Pakaian Baru -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                <h3 class="font-bold text-slate-900 mb-1">Tambah Pakaian Baru</h3>
+                <p class="text-xs text-slate-500 mb-4">Kemaskini almari maya anda untuk kombinasi yang lebih pelbagai.</p>
+                
+                <form id="addClothingForm" onsubmit="tambahPakaian(event)" class="flex flex-col gap-4">
+                    <!-- Nama Item -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Nama Pakaian</label>
+                        <input type="text" id="itemName" required placeholder="Contoh: Kemeja Flannel Merah" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-colors">
+                    </div>
+
+                    <!-- Kategori, Acara & Emoji -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Kategori</label>
+                            <select id="itemCategory" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-colors">
+                                <option value="baju">👕 Baju</option>
+                                <option value="seluar">👖 Seluar</option>
+                                <option value="kasut">👟 Kasut</option>
+                                <option value="aksesori">🕶️ Aksesori</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Acara</label>
+                            <select id="itemOccasion" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-colors">
+                                <option value="kasual">Kasual</option>
+                                <option value="pejabat">Pejabat</option>
+                                <option value="sukan">Sukan</option>
+                                <option value="formal">Formal</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Emoji Visual</label>
+                            <input type="text" id="itemEmoji" placeholder="👕" maxlength="2" required class="w-full text-center text-lg bg-slate-50 border border-slate-200 rounded-xl py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-colors">
+                        </div>
+                    </div>
+
+                    <!-- Butang Tambah -->
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl smooth-transition active:scale-[0.98] flex items-center justify-center gap-2 mt-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Masukkan ke Almari</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Senarai Almari Pakaian Sedia Ada -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex-grow flex flex-col">
+                <div class="flex justify-between items-center mb-3">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Almari Pakaian Saya</h3>
+                        <p class="text-xs text-slate-500">Senarai item pakaian yang anda miliki.</p>
+                    </div>
+                </div>
+
+                <!-- Tab Kategori untuk Almari -->
+                <div class="flex gap-1 border-b border-slate-100 pb-2 mb-4 overflow-x-auto">
+                    <button onclick="tukarTabAlmari('semua')" id="tab-semua" class="tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition bg-indigo-50 text-indigo-600">Semua</button>
+                    <button onclick="tukarTabAlmari('baju')" id="tab-baju" class="tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition text-slate-500 hover:bg-slate-50">Baju</button>
+                    <button onclick="tukarTabAlmari('seluar')" id="tab-seluar" class="tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition text-slate-500 hover:bg-slate-50">Seluar</button>
+                    <button onclick="tukarTabAlmari('kasut')" id="tab-kasut" class="tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition text-slate-500 hover:bg-slate-50">Kasut</button>
+                    <button onclick="tukarTabAlmari('aksesori')" id="tab-aksesori" class="tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition text-slate-500 hover:bg-slate-50">Aksesori</button>
+                </div>
+
+                <!-- Senarai Item -->
+                <div id="wardrobeList" class="flex-grow overflow-y-auto max-h-[350px] flex flex-col gap-2 pr-1">
+                    <!-- Senarai akan dimasukkan secara dinamik oleh JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Alert Kustom (Ganti alert pelayar asli) -->
+    <div id="customAlert" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl border border-slate-100 flex flex-col items-center text-center gap-4 transform scale-95 transition-transform duration-300" id="customAlertBox">
+            <div id="alertIconContainer" class="p-3 bg-indigo-50 text-indigo-600 rounded-full">
+                <i data-lucide="info" class="w-8 h-8" id="alertIcon"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-lg" id="alertTitle">Notifikasi</h4>
+                <p class="text-sm text-slate-500 mt-1" id="alertMessage">Mesej di sini...</p>
+            </div>
+            <button onclick="tutupAlert()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl smooth-transition">
+                Faham
+            </button>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-12 text-center text-xs">
+        <p>&copy; 2026 GayaHarian. Dijana khas untuk gaya hidup efisien dan kemas.</p>
+    </footer>
+
+    <!-- Logik Javascript Utama -->
+    <script>
+        // Data Pakaian Awal (Preset) sebagai rujukan pertama kali pengguna buka
+        const PRESET_CLOTHING = [
+            { id: 1, name: "T-Shirt Putih Kosong", category: "baju", occasion: "kasual", emoji: "👕" },
+            { id: 2, name: "Kemeja Oxford Biru", category: "baju", occasion: "pejabat", emoji: "👔" },
+            { id: 3, name: "Baju Sukan Poliester", category: "baju", occasion: "sukan", emoji: "🎽" },
+            { id: 4, name: "Blazer Formal Hitam", category: "baju", occasion: "formal", emoji: "🧥" },
+            
+            { id: 5, name: "Jeans Biru Gelap", category: "seluar", occasion: "kasual", emoji: "👖" },
+            { id: 6, name: "Seluar Chino Khaki", category: "seluar", occasion: "pejabat", emoji: "👖" },
+            { id: 7, name: "Seluar Sukan (Tracksuit)", category: "seluar", occasion: "sukan", emoji: "🩳" },
+            { id: 8, name: "Seluar Slack Hitam", category: "seluar", occasion: "formal", emoji: "👖" },
+            
+            { id: 9, name: "Sneakers Putih", category: "kasut", occasion: "kasual", emoji: "👟" },
+            { id: 10, name: "Kasut Kulit Loafer", category: "kasut", occasion: "pejabat", emoji: "👞" },
+            { id: 11, name: "Kasut Larian Nike", category: "kasut", occasion: "sukan", emoji: "👟" },
+            { id: 12, name: "Kasut Oxford Hitam", category: "kasut", occasion: "formal", emoji: "👞" },
+            
+            { id: 13, name: "Cermin Mata Hitam Aviator", category: "aksesori", occasion: "kasual", emoji: "🕶️" },
+            { id: 14, name: "Jam Tangan Kulit", category: "aksesori", occasion: "pejabat", emoji: "⌚" },
+            { id: 15, name: "Topi Besbol Hitam", category: "aksesori", occasion: "sukan", emoji: "🧢" },
+            { id: 16, name: "Tali Leher Sutera", category: "aksesori", occasion: "formal", emoji: "👔" }
+        ];
+
+        // Memulakan State Aplikasi
+        let wardrobe = [...PRESET_CLOTHING];
+        let currentTab = "semua";
+        let activeOutfit = { baju: null, seluar: null, kasut: null, aksesori: null };
+        let savedOutfits = [];
+
+        // Inisialisasi Aplikasi ketika DOM Selesai Dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Cuba dapatkan data dari Local Storage jika pernah digunakan sebelum ini
+            const localWardrobe = localStorage.getItem('GayaHarian_Wardrobe');
+            const localSaved = localStorage.getItem('GayaHarian_Saved');
+            
+            if (localWardrobe) {
+                wardrobe = JSON.parse(localWardrobe);
+            }
+            if (localSaved) {
+                savedOutfits = JSON.parse(localSaved);
+            }
+
+            // Kemaskini UI
+            renderAlmari();
+            renderSavedOutfits();
+            
+            // Auto-jana pakaian permulaan
+            janaPakaian();
+
+            // Set Emoji dinamik mengikut pemilihan kategori dalam borang
+            document.getElementById('itemCategory').addEventListener('change', (e) => {
+                const mapEmoji = {
+                    baju: "👕",
+                    seluar: "👖",
+                    kasut: "👟",
+                    aksesori: "🕶️"
+                };
+                document.getElementById('itemEmoji').value = mapEmoji[e.target.value] || "👕";
+            });
+            // Set emoji lalai pada mula
+            document.getElementById('itemEmoji').value = "👕";
+        });
+
+        // Tunjukkan Alert Kustom menggantikan alert() bawaan pelayar
+        function tunjukAlert(tajuk, mesej, jenis = "info") {
+            const modal = document.getElementById('customAlert');
+            const alertBox = document.getElementById('customAlertBox');
+            const iconContainer = document.getElementById('alertIconContainer');
+            const icon = document.getElementById('alertIcon');
+            
+            document.getElementById('alertTitle').innerText = tajuk;
+            document.getElementById('alertMessage').innerText = mesej;
+
+            // Set gaya ikon mengikut jenis alert
+            if (jenis === "sukses") {
+                iconContainer.className = "p-3 bg-emerald-50 text-emerald-600 rounded-full";
+                icon.setAttribute('data-lucide', 'check-circle');
+            } else if (jenis === "bahaya") {
+                iconContainer.className = "p-3 bg-rose-50 text-rose-600 rounded-full";
+                icon.setAttribute('data-lucide', 'alert-triangle');
+            } else {
+                iconContainer.className = "p-3 bg-indigo-50 text-indigo-600 rounded-full";
+                icon.setAttribute('data-lucide', 'info');
+            }
+            
+            lucide.createIcons();
+
+            // Animasi masuk
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                alertBox.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function tutupAlert() {
+            const modal = document.getElementById('customAlert');
+            const alertBox = document.getElementById('customAlertBox');
+            
+            modal.classList.add('opacity-0');
+            alertBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Fungsi Menjana Pakaian Secara Rawak mengikut Tapis Acara
+        function janaPakaian() {
+            const filterOccasion = document.getElementById('occasionFilter').value;
+            const categories = ['baju', 'seluar', 'kasut', 'aksesori'];
+            
+            // Pusing butang jana untuk kesan animasi seketika
+            const ikonJana = document.getElementById('btn-jana-ikon');
+            ikonJana.classList.add('animate-spin');
+            setTimeout(() => ikonJana.classList.remove('animate-spin'), 600);
+
+            let temporaryOutfit = {};
+
+            categories.forEach(cat => {
+                // Tapis mengikut kategori dan acara (jika terpilih)
+                let senaraiPilihan = wardrobe.filter(item => item.category === cat);
+                
+                if (filterOccasion !== 'semua') {
+                    const bertapis = senaraiPilihan.filter(item => item.occasion === filterOccasion);
+                    // Jika ada item yang sepadan dengan acara tersebut, gunakan list ditapis. Jika tiada, gunakan semua.
+                    if (bertapis.length > 0) {
+                        senaraiPilihan = bertapis;
+                    }
+                }
+
+                if (senaraiPilihan.length > 0) {
+                    const rawak = senaraiPilihan[Math.floor(Math.random() * senaraiPilihan.length)];
+                    temporaryOutfit[cat] = rawak;
+                } else {
+                    temporaryOutfit[cat] = null;
+                }
+            });
+
+            activeOutfit = temporaryOutfit;
+            kemaskiniSlotPenjana();
+        }
+
+        // Kemaskini Visual Slot Penjana
+        function kemaskiniSlotPenjana() {
+            const categories = ['baju', 'seluar', 'kasut', 'aksesori'];
+            
+            categories.forEach(cat => {
+                const slotDiv = document.getElementById(`slot-${cat}`);
+                const nameTag = document.getElementById(`slot-${cat}-nama`);
+                const emojiTag = document.getElementById(`slot-${cat}-emoji`);
+                const occasionTag = document.getElementById(`slot-${cat}-tag`);
+
+                // Animasi tindakbalas visual tukar item
+                slotDiv.classList.add('scale-95', 'opacity-50');
+
+                setTimeout(() => {
+                    if (activeOutfit[cat]) {
+                        const item = activeOutfit[cat];
+                        nameTag.innerText = item.name;
+                        nameTag.classList.remove('text-slate-400');
+                        nameTag.classList.add('text-slate-800');
+                        
+                        emojiTag.innerText = item.emoji;
+                        
+                        occasionTag.innerText = item.occasion.charAt(0).toUpperCase() + item.occasion.slice(1);
+                        occasionTag.classList.remove('hidden');
+                    } else {
+                        // Jika slot kosong
+                        nameTag.innerText = "Tiada Item";
+                        nameTag.classList.remove('text-slate-800');
+                        nameTag.classList.add('text-slate-400');
+                        
+                        emojiTag.innerText = "❓";
+                        occasionTag.classList.add('hidden');
+                    }
+                    slotDiv.classList.remove('scale-95', 'opacity-50');
+                }, 150);
+            });
+        }
+
+        // Tambah Item Pakaian baru ke Almari
+        function tambahPakaian(e) {
+            e.preventDefault();
+            const nama = document.getElementById('itemName').value.trim();
+            const kategori = document.getElementById('itemCategory').value;
+            const acara = document.getElementById('itemOccasion').value;
+            const emoji = document.getElementById('itemEmoji').value.trim() || "👕";
+
+            if (!nama) {
+                tunjukAlert("Error", "Sila masukkan nama pakaian dengan betul.", "bahaya");
+                return;
+            }
+
+            const itemBaru = {
+                id: Date.now(), // Generate ID unik berasaskan timestamp
+                name: nama,
+                category: kategori,
+                occasion: acara,
+                emoji: emoji
+            };
+
+            wardrobe.push(itemBaru);
+            saveToLocalStorage();
+            
+            // Set semula borang
+            document.getElementById('itemName').value = "";
+            
+            tunjukAlert("Berjaya!", `"${nama}" telah selamat ditambah ke almari anda.`, "sukses");
+            
+            renderAlmari();
+        }
+
+        // Padam Pakaian dari Almari
+        function padamPakaian(id, nama) {
+            // Pengesahan ringkas melalui UI
+            const setuju = confirm(`Adakah anda pasti mahu memadam "${nama}" daripada almari anda?`);
+            if (!setuju) return;
+
+            wardrobe = wardrobe.filter(item => item.id !== id);
+            saveToLocalStorage();
+            renderAlmari();
+            tunjukAlert("Dipadam", `"${nama}" telah dipadam daripada almari.`, "info");
+        }
+
+        // Menukar Tab Paparan Almari
+        function tukarTabAlmari(tab) {
+            currentTab = tab;
+            
+            // Tukar reka bentuk butang aktif
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition text-slate-500 hover:bg-slate-50";
+            });
+
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.className = "tab-btn px-3 py-1.5 text-xs font-bold rounded-lg smooth-transition bg-indigo-50 text-indigo-600";
+
+            renderAlmari();
+        }
+
+        // Memaparkan List Almari ke Skrin
+        function renderAlmari() {
+            const container = document.getElementById('wardrobeList');
+            container.innerHTML = "";
+
+            const itemsDitapis = wardrobe.filter(item => {
+                if (currentTab === "semua") return true;
+                return item.category === currentTab;
+            });
+
+            if (itemsDitapis.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 text-sm flex flex-col items-center justify-center gap-1.5">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                        <span>Tiada pakaian dalam kategori ini.</span>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Susun dari terkini ke lama
+            itemsDitapis.reverse().forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/80 rounded-xl border border-slate-100/50 smooth-transition";
+                
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl bg-white p-1.5 rounded-lg border border-slate-100 shadow-sm">${item.emoji}</div>
+                        <div>
+                            <h4 class="font-semibold text-xs sm:text-sm text-slate-800 leading-tight">${item.name}</h4>
+                            <div class="flex gap-1.5 mt-1 items-center">
+                                <span class="text-[10px] text-slate-500 bg-slate-200/60 px-1.5 py-0.5 rounded capitalize">${item.category}</span>
+                                <span class="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded capitalize">${item.occasion}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="padamPakaian(${item.id}, '${item.name}')" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg hover:bg-rose-50 smooth-transition" title="Padam Item">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Menyimpan Kombinasi OOTD Kegemaran
+        function simpanOOTDKegemaran() {
+            // Pastikan sekurang-kurangnya baju dan seluar ada
+            if (!activeOutfit.baju || !activeOutfit.seluar) {
+                tunjukAlert("Maaf", "Sila jana kombinasi lengkap dahulu sebelum menyimpannya.", "bahaya");
+                return;
+            }
+
+            const idUnik = Date.now();
+            const ootdSave = {
+                id: idUnik,
+                baju: { ...activeOutfit.baju },
+                seluar: { ...activeOutfit.seluar },
+                kasut: activeOutfit.kasut ? { ...activeOutfit.kasut } : null,
+                aksesori: activeOutfit.aksesori ? { ...activeOutfit.aksesori } : null,
+                tarikh: new Date().toLocaleDateString('ms-MY', { day: 'numeric', month: 'short' })
+            };
+
+            // Semak jika sudah wujud kombinasi serupa dalam rekod kegemaran
+            const adakahSama = savedOutfits.some(exist => {
+                return exist.baju.id === ootdSave.baju.id &&
+                       exist.seluar.id === ootdSave.seluar.id &&
+                       (exist.kasut?.id === ootdSave.kasut?.id) &&
+                       (exist.aksesori?.id === ootdSave.aksesori?.id);
+            });
+
+            if (adakahSama) {
+                tunjukAlert("Makluman", "Anda sudah pun menyimpan kombinasi OOTD ini ke dalam kegemaran!", "info");
+                return;
+            }
+
+            savedOutfits.push(ootdSave);
+            saveToLocalStorage();
+            renderSavedOutfits();
+            
+            tunjukAlert("Yay!", "Kombinasi OOTD cantik anda berjaya disimpan ke Koleksi Pilihan.", "sukses");
+        }
+
+        // Padam Kombinasi Kegemaran
+        function padamOOTDSaved(id) {
+            savedOutfits = savedOutfits.filter(ootd => ootd.id !== id);
+            saveToLocalStorage();
+            renderSavedOutfits();
+        }
+
+        // Memaparkan List OOTD Kegemaran
+        function renderSavedOutfits() {
+            const container = document.getElementById('savedOutfitsContainer');
+            const noSavedPrompt = document.getElementById('noSavedPrompt');
+            const countBadge = document.getElementById('savedCount');
+            
+            // Kosongkan senarai lama kecuali prompt tiada data
+            container.innerHTML = "";
+            container.appendChild(noSavedPrompt);
+
+            countBadge.innerText = `${savedOutfits.length} Kombinasi`;
+
+            if (savedOutfits.length === 0) {
+                noSavedPrompt.classList.remove('hidden');
+                return;
+            }
+
+            noSavedPrompt.classList.add('hidden');
+
+            savedOutfits.reverse().forEach(ootd => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-100 rounded-xl p-3.5 flex flex-col justify-between relative group smooth-transition hover:border-indigo-100 hover:shadow-sm";
+                
+                // Bina struktur emoji ringkas untuk kad
+                let itemsPreview = `${ootd.baju.emoji} ${ootd.seluar.emoji}`;
+                if (ootd.kasut) itemsPreview += ` ${ootd.kasut.emoji}`;
+                if (ootd.aksesori) itemsPreview += ` ${ootd.aksesori.emoji}`;
+
+                // Huraian ringkas
+                let textPreview = `${ootd.baju.name} + ${ootd.seluar.name}`;
+
+                card.innerHTML = `
+                    <div class="pr-6">
+                        <div class="text-xl mb-1">${itemsPreview}</div>
+                        <p class="font-semibold text-xs text-slate-800 leading-tight line-clamp-2">${textPreview}</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Disimpan pada ${ootd.tarikh}</span>
+                    </div>
+                    
+                    <!-- Butang Padam Pilihan OOTD -->
+                    <button onclick="padamOOTDSaved(${ootd.id})" class="absolute top-3 right-3 text-slate-300 hover:text-rose-600 smooth-transition" title="Padam dari Koleksi">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Simpan Data Terkini ke Local Storage Pelayar
+        function saveToLocalStorage() {
+            localStorage.setItem('GayaHarian_Wardrobe', JSON.stringify(wardrobe));
+            localStorage.setItem('GayaHarian_Saved', JSON.stringify(savedOutfits));
+        }
+    </script>
+</body>
+</html>
