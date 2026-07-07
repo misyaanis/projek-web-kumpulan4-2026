@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renjana - Warisan Masakan Melayu Moden</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            900: '#022c22',
+                            800: '#064e3b',
+                            700: '#0f766e',
+                            600: '#0d9488',
+                            50: '#f0fdfa',
+                        },
+                        gold: {
+                            50: '#fdfbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #064e3b;
+            border-radius: 10px;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-[#fafaf7] text-gray-800 font-sans antialiased custom-scrollbar">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 bg-emerald-900 text-white shadow-xl border-b border-emerald-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="scrollToSection('home')">
+                    <div class="bg-gradient-to-br from-gold-400 to-gold-600 p-2.5 rounded-full shadow-md">
+                        <svg class="w-7 h-7 text-emerald-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl font-bold tracking-widest text-gold-400 block leading-tight">RENJANA</span>
+                        <span class="text-[10px] tracking-widest text-emerald-200 block -mt-1 uppercase">Sajian Warisan Melayu</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Links -->
+                <div class="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
+                    <button onclick="scrollToSection('home')" class="hover:text-gold-400 transition-colors duration-200">Utama</button>
+                    <button onclick="scrollToSection('menu')" class="hover:text-gold-400 transition-colors duration-200">Menu Hidangan</button>
+                    <button onclick="openBookingSection()" class="hover:text-gold-400 transition-colors duration-200">Tempahan Meja</button>
+                    <button onclick="openWalkInSection()" class="hover:text-gold-400 transition-colors duration-200 text-gold-400 font-semibold border border-gold-500/30 px-3 py-1 rounded-full bg-emerald-950/40">Pesanan Walk-In</button>
+                    <button onclick="scrollToSection('hubungi')" class="hover:text-gold-400 transition-colors duration-200">Hubungi</button>
+                </div>
+
+                <!-- Cart Button & Mobile Menu Trigger -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart Button -->
+                    <button onclick="toggleCartDrawer()" class="relative p-2 bg-emerald-950 rounded-full hover:bg-emerald-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                        <i class="fa-solid fa-basket-shopping text-xl text-gold-400"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Icon -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-white hover:text-gold-400 focus:outline-none">
+                        <i id="menu-icon" class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden bg-emerald-950 border-t border-emerald-800/60 px-4 py-4 space-y-3 transition-all duration-300">
+            <button onclick="scrollToSection('home'); toggleMobileMenu()" class="block w-full text-left py-2 hover:bg-emerald-900 px-3 rounded text-white">Utama</button>
+            <button onclick="scrollToSection('menu'); toggleMobileMenu()" class="block w-full text-left py-2 hover:bg-emerald-900 px-3 rounded text-white">Menu Hidangan</button>
+            <button onclick="openBookingSection(); toggleMobileMenu()" class="block w-full text-left py-2 hover:bg-emerald-900 px-3 rounded text-gold-400 font-semibold">Tempahan Meja</button>
+            <button onclick="openWalkInSection(); toggleMobileMenu()" class="block w-full text-left py-2 bg-gold-600 hover:bg-gold-700 px-3 rounded text-emerald-950 font-bold">Pesanan Walk-In (Di Kedai)</button>
+            <button onclick="scrollToSection('hubungi'); toggleMobileMenu()" class="block w-full text-left py-2 hover:bg-emerald-900 px-3 rounded text-white">Hubungi</button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header id="home" class="relative bg-emerald-950 text-white overflow-hidden py-24 sm:py-32">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10 mix-blend-overlay bg-repeat" style="background-image: url('https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=2000'); background-size: cover; background-position: center;"></div>
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-gold-600/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-800/30 rounded-full blur-3xl"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-gold-400 uppercase bg-emerald-900/80 border border-gold-500/30 rounded-full">Kembara Rasa Melayu Asli</span>
+            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6">
+                Santapan Warisan <br class="hidden sm:inline">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600">Jiwa & Renjana</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-base sm:text-xl text-emerald-100/90 leading-relaxed mb-10">
+                Nikmati keunikan kulinari Melayu klasik yang diberi nafas baharu menggunakan bahan premium dan resepi turun-temurun. Sedia dihidang untuk kenangan terindah anda.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button onclick="openBookingSection()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-emerald-950 font-bold rounded-xl shadow-lg hover:shadow-gold-500/20 transform hover:-translate-y-0.5 transition-all duration-200">
+                    <i class="fa-solid fa-calendar-days mr-2"></i>Tempah Meja Anda
+                </button>
+                <button onclick="openWalkInSection()" class="w-full sm:w-auto px-8 py-4 bg-emerald-900 hover:bg-emerald-800 border border-gold-500/40 text-gold-400 font-bold rounded-xl shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                    <i class="fa-solid fa-utensils mr-2"></i>Pesanan Walk-In / Meja
+                </button>
+            </div>
+
+            <!-- Features Quick Info -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 border-t border-emerald-800/60 pt-10 text-center">
+                <div class="p-3">
+                    <p class="text-2xl sm:text-3xl font-serif font-bold text-gold-400">100%</p>
+                    <p class="text-xs sm:text-sm text-emerald-200">Halalan Toyyiban</p>
+                </div>
+                <div class="p-3">
+                    <p class="text-2xl sm:text-3xl font-serif font-bold text-gold-400">45+</p>
+                    <p class="text-xs sm:text-sm text-emerald-200">Menu Tradisional & Moden</p>
+                </div>
+                <div class="p-3">
+                    <p class="text-2xl sm:text-3xl font-serif font-bold text-gold-400">120</p>
+                    <p class="text-xs sm:text-sm text-emerald-200">Kapasiti Tempat Duduk</p>
+                </div>
+                <div class="p-3">
+                    <p class="text-2xl sm:text-3xl font-serif font-bold text-gold-400">20+</p>
+                    <p class="text-xs sm:text-sm text-emerald-200">Ruang Parkir Berpengawal</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- INTERACTIVE SERVICE SELECTOR SECTION -->
+    <section id="services-section" class="py-12 bg-white border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-emerald-50 rounded-2xl p-2 sm:p-4 flex flex-col sm:flex-row gap-2 shadow-inner">
+                <button id="tab-booking-btn" onclick="switchMainService('booking')" class="flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 bg-emerald-900 text-white shadow-md">
+                    <i class="fa-solid fa-chair text-lg"></i>
+                    <div>
+                        <span class="block text-sm">Tempahan Awal</span>
+                        <span class="block text-[10px] font-normal opacity-80">Booking Meja & Slot Masa</span>
+                    </div>
+                </button>
+                <button id="tab-walkin-btn" onclick="switchMainService('walkin')" class="flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 text-emerald-900 hover:bg-emerald-100/50">
+                    <i class="fa-solid fa-qrcode text-lg"></i>
+                    <div>
+                        <span class="block text-sm">Pesanan Walk-In</span>
+                        <span class="block text-[10px] font-normal text-emerald-700">Dah sampai meja? Order terus!</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKSPACE AREA: BOOKING & WALK-IN FORMS -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            
+            <!-- BOOKING CONTAINER -->
+            <div id="booking-container" class="transition-all duration-500 opacity-100">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-5 bg-emerald-900 p-8 sm:p-12 text-white flex flex-col justify-between relative">
+                        <div class="absolute inset-0 opacity-5 mix-blend-overlay bg-cover" style="background-image: url('https://placehold.co/600x800/022c22/ffffff?text=Renjana+Sajian');"></div>
+                        <div>
+                            <span class="text-gold-400 text-xs font-bold tracking-widest uppercase">Perancangan Rapi</span>
+                            <h3 class="font-serif text-3xl font-bold mt-2 mb-4">Tempahan Meja Istimewa</h3>
+                            <p class="text-sm text-emerald-100/80 leading-relaxed mb-6">
+                                Rancang pertemuan bersama keluarga tercinta, sambutan ulang tahun atau mesyuarat perniagaan korporat dengan keselesaan terunggul.
+                            </p>
+                            <ul class="space-y-4 text-sm text-emerald-100">
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-gold-400"></i> Simpan slot meja terbaik tanpa beratur panjang.
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-gold-400"></i> Pilihan preorder menu kegemaran anda.
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-gold-400"></i> Percuma hiasan meja hari jadi (atas permintaan).
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-8 border-t border-emerald-800 pt-6">
+                            <p class="text-xs text-emerald-300">Waktu Operasi:</p>
+                            <p class="text-sm font-semibold text-gold-400">Isnin - Ahad (11:00 Pagi - 11:00 Malam)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-7 p-8 sm:p-12">
+                        <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-6">
+                            <h4 class="text-xl font-bold text-emerald-950 pb-2 border-b border-gray-100">Butiran Tempahan</h4>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Nama Penuh</label>
+                                    <input type="text" id="booking-name" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition" placeholder="cth: Ahmad Fauzi">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">No. Telefon</label>
+                                    <input type="tel" id="booking-phone" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition" placeholder="cth: 0123456789">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Tarikh</label>
+                                    <input type="date" id="booking-date" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Masa</label>
+                                    <select id="booking-time" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition">
+                                        <option value="">Pilih Masa</option>
+                                        <option value="11:30">11:30 Pagi (Lunch)</option>
+                                        <option value="12:30">12:30 Tengah Hari (Lunch)</option>
+                                        <option value="13:30">01:30 Tengah Hari (Lunch)</option>
+                                        <option value="17:00">05:00 Petang (Hi-Tea)</option>
+                                        <option value="19:30">07:30 Malam (Dinner)</option>
+                                        <option value="20:30">08:30 Malam (Dinner)</option>
+                                        <option value="21:30">09:30 Malam (Dinner)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Bilangan Tetamu</label>
+                                    <select id="booking-pax" required class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition">
+                                        <option value="2">2 Orang</option>
+                                        <option value="4">4 Orang</option>
+                                        <option value="6">6 Orang</option>
+                                        <option value="8">8 Orang</option>
+                                        <option value="10">10 Orang (Meja Khas)</option>
+                                        <option value="12+">Meja Korporat (12+ Pax)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Permintaan Khas (Opsional)</label>
+                                <textarea id="booking-notes" rows="2" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-800 focus:bg-white outline-none transition placeholder-gray-400" placeholder="Sila maklumkan sekiranya memerlukan kerusi kanak-kanak, sambutan hari lahir, atau alahan makanan."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-white font-bold rounded-xl shadow-lg transition duration-200">
+                                <i class="fa-solid fa-clipboard-check mr-2"></i>Selesaikan Pendaftaran Tempahan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WALK-IN CONTAINER -->
+            <div id="walkin-container" class="hidden transition-all duration-500 opacity-0">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-5 bg-gradient-to-br from-amber-600 to-gold-700 p-8 sm:p-12 text-white flex flex-col justify-between relative">
+                        <div>
+                            <span class="bg-emerald-900 text-gold-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase inline-block mb-3">Sistem Meja Pintar</span>
+                            <h3 class="font-serif text-3xl font-bold mb-4">Pesanan Meja Secara Langsung</h3>
+                            <p class="text-sm text-gold-50/90 leading-relaxed mb-6">
+                                Sudah berada di dalam Restoran Renjana? Imbas terus, pilih nombor meja anda, pesan lauk-pauk kegemaran, dan hidangan terus dihantar panas-panas dari kawah!
+                            </p>
+                            <div class="bg-emerald-950/40 p-4 rounded-xl border border-white/10 space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-6 h-6 bg-gold-400 text-emerald-950 text-xs font-bold rounded-full flex items-center justify-center">1</span>
+                                    <span class="text-xs font-medium">Masukkan Nombor Meja Anda</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-6 h-6 bg-gold-400 text-emerald-950 text-xs font-bold rounded-full flex items-center justify-center">2</span>
+                                    <span class="text-xs font-medium">Pilih Menu Hidangan & Minuman</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-6 h-6 bg-gold-400 text-emerald-950 text-xs font-bold rounded-full flex items-center justify-center">3</span>
+                                    <span class="text-xs font-medium">Hantar pesanan ke Dapur Renjana</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 border-t border-gold-500/30 pt-4 text-xs opacity-85">
+                            Sistem ini menggunakan kependaman sifar untuk memproses terus pesanan anda ke sistem Point-Of-Sale dapur kami.
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-7 p-8 sm:p-12">
+                        <div class="space-y-6">
+                            <h4 class="text-xl font-bold text-emerald-950 pb-2 border-b border-gray-100">Kunci Masuk Meja</h4>
+                            
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Pilih Nombor Meja Anda (1-20)</label>
+                                <div class="grid grid-cols-5 gap-3" id="table-selector-grid">
+                                    <!-- Dynamic tables generated via JS -->
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-3">
+                                <i class="fa-solid fa-circle-info text-emerald-800 text-lg mt-0.5"></i>
+                                <div class="text-xs text-emerald-900 leading-relaxed">
+                                    <span class="font-bold">Nota Meja:</span> Sila pastikan nombor meja yang anda pilih berpadanan dengan label di atas meja fizikal anda untuk mengelakkan salah serah hidangan.
+                                </div>
+                            </div>
+
+                            <button onclick="scrollToSection('menu')" class="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-white font-bold rounded-xl shadow-lg transition duration-200">
+                                <i class="fa-solid fa-arrow-down mr-2"></i>Mula Memilih Menu Di Bawah
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- INTERACTIVE MENU SECTION -->
+    <section id="menu" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-gold-600 text-xs font-bold tracking-widest uppercase">Eksplorasi Rasa</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-emerald-950 mt-2 mb-4">Naskhah Hidangan Renjana</h2>
+                <p class="text-gray-500">
+                    Sajian bertaraf seni yang dimasak dengan penuh kasih sayang. Kami membawakan keunikan rasa tradisional bersalut gaya moden kontemporari.
+                </p>
+            </div>
+
+            <!-- Menu Category Filter Tabs -->
+            <div class="flex flex-wrap justify-center gap-2 mb-12 border-b border-gray-100 pb-6">
+                <button onclick="filterMenu('semua')" id="cat-semua" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold bg-emerald-900 text-white shadow-md transition-all duration-300">
+                    Semua Hidangan
+                </button>
+                <button onclick="filterMenu('lunch-set')" id="cat-lunch-set" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300">
+                    Set Makan Tengah Hari (Lunch)
+                </button>
+                <button onclick="filterMenu('dinner-set')" id="cat-dinner-set" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300">
+                    Set Makan Malam (Dinner)
+                </button>
+                <button onclick="filterMenu('lauk-pauk')" id="cat-lauk-pauk" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300">
+                    Lauk-Pauk Warisan
+                </button>
+                <button onclick="filterMenu('minuman')" id="cat-minuman" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300">
+                    Minuman & Air
+                </button>
+                <button onclick="filterMenu('pencuci-mulut')" id="cat-pencuci-mulut" class="cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300">
+                    Pencuci Mulut
+                </button>
+            </div>
+
+            <!-- Menu Cards Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Menu Items are generated dynamically via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT & STORY SECTION -->
+    <section class="py-24 bg-gradient-to-br from-[#fafaf7] to-emerald-50/50 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-gold-100 rounded-full blur-2xl z-0"></div>
+                    <!-- Mock premium image using stylized HTML/CSS placeholder structure -->
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-emerald-900 p-8 sm:p-12 text-white aspect-[4/3] flex flex-col justify-between">
+                        <div class="absolute inset-0 bg-cover opacity-15" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=800');"></div>
+                        <div class="relative">
+                            <div class="w-16 h-1 bg-gold-400 mb-6"></div>
+                            <h3 class="font-serif text-3xl sm:text-4xl font-extrabold mb-4 leading-snug">Rahsia di sebalik <br><span class="text-gold-400">Dapur Kawah</span> Renjana</h3>
+                            <p class="text-emerald-100/90 text-sm leading-relaxed mb-6">
+                                Setiap rempah digiling sendiri, santan diperah segar, dan daging disalai secara tradisional menggunakan kayu pokok mangga untuk membangkitkan aroma yang luar biasa asli.
+                            </p>
+                        </div>
+                        <div class="relative flex items-center gap-4 bg-emerald-950/50 p-4 rounded-xl border border-white/10">
+                            <i class="fa-solid fa-medal text-3xl text-gold-400"></i>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-gold-400">Anugerah Kulinari 2025</h4>
+                                <p class="text-[11px] text-emerald-200">Restoran Masakan Warisan Melayu Terbaik Pantai Barat</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <span class="text-gold-600 text-xs font-bold tracking-widest uppercase">Mengenai Renjana</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-emerald-950">Menyulam Rasa Tradisi Ke Alaf Baharu</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Diasaskan oleh sekumpulan anak muda jati Perak dan Negeri Sembilan, Renjana diwujudkan bagi merapatkan jurang masakan kampung yang kian pupus dengan dunia masakan gastro kontemporari. 
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Kami komited menyajikan hanya bahan mentah bermutu tinggi. Daging lembu tempatan yang empuk, siakap liar segar dari nelayan persisir, dan herba heritages yang segar dari kebun sayur komuniti kami.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-900/10 rounded-full flex items-center justify-center text-emerald-900">
+                                <i class="fa-solid fa-plate-wheat"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-950">Tanpa MSG Tiruan</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-900/10 rounded-full flex items-center justify-center text-emerald-900">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-950">Resipi Berusia 80 Tahun</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOPPING CART / ORDER DETAILS DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 overflow-hidden">
+            <!-- Overlay -->
+            <div id="cart-overlay" onclick="toggleCartDrawer()" class="absolute inset-0 bg-gray-900 bg-opacity-75 transition-opacity duration-300 opacity-0"></div>
+            
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                <div id="cart-panel" class="pointer-events-auto w-screen max-w-md transform transition-transform duration-300 ease-in-out translate-x-full bg-white shadow-2xl flex flex-col">
+                    
+                    <!-- Drawer Header -->
+                    <div class="px-6 py-6 bg-emerald-900 text-white flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-basket-shopping text-xl text-gold-400"></i>
+                            <h2 class="text-lg font-bold tracking-wide">Troli Hidangan Anda</h2>
+                        </div>
+                        <button onclick="toggleCartDrawer()" class="p-2 -mr-2 text-emerald-200 hover:text-white focus:outline-none">
+                            <i class="fa-solid fa-xmark text-2xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Order Mode Switcher in Drawer -->
+                    <div class="p-4 bg-emerald-50 border-b border-emerald-100 flex gap-2">
+                        <button id="cart-mode-walkin" onclick="changeOrderModeInCart('walkin')" class="flex-1 py-2 text-xs font-bold rounded-lg border border-emerald-800 bg-emerald-900 text-white text-center shadow-sm">
+                            <i class="fa-solid fa-qrcode mr-1"></i>Walk-In (Makan Di Sini)
+                        </button>
+                        <button id="cart-mode-booking" onclick="changeOrderModeInCart('booking')" class="flex-1 py-2 text-xs font-bold rounded-lg border border-gray-200 text-emerald-900 text-center hover:bg-emerald-100/30">
+                            <i class="fa-solid fa-calendar mr-1"></i>Pre-order (Tempahan)
+                        </button>
+                    </div>
+
+                    <!-- Cart Content -->
+                    <div class="flex-1 overflow-y-auto px-6 py-6 custom-scrollbar" id="cart-items-container">
+                        <!-- Dynamic Cart items inject here -->
+                    </div>
+
+                    <!-- Calculation Footer -->
+                    <div class="border-t border-gray-100 px-6 py-6 bg-gray-50 space-y-4">
+                        <!-- Details of Booking/Table in Cart -->
+                        <div id="cart-context-info" class="p-3 bg-white rounded-xl border border-gray-200 text-xs text-gray-600 flex justify-between items-center">
+                            <!-- Injected by Javascript -->
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm text-gray-500">
+                                <span>Harga Makanan & Air</span>
+                                <span id="cart-subtotal">RM 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-500">
+                                <span>Cukai Perkhidmatan (10%)</span>
+                                <span id="cart-service-tax">RM 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-500">
+                                <span>Cukai Kerajaan / SST (6%)</span>
+                                <span id="cart-sst">RM 0.00</span>
+                            </div>
+                            <div class="border-t border-dashed border-gray-200 pt-2 flex justify-between text-base font-bold text-emerald-950">
+                                <span>Jumlah Keseluruhan</span>
+                                <span id="cart-grandtotal" class="text-gold-600">RM 0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button id="checkout-btn" onclick="processCheckout()" class="w-full py-4 bg-emerald-900 hover:bg-emerald-950 text-white text-center font-bold rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                                <span>Hantar Pesanan & Resit</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS RECEIPT MODAL -->
+    <div id="receipt-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" role="dialog" aria-modal="true">
+        <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
+            <!-- Modal overlay -->
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"></div>
+
+            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border-t-8 border-gold-500">
+                <div class="p-6 sm:p-8">
+                    <!-- Top Ribbon Success -->
+                    <div class="text-center mb-6">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 mb-4">
+                            <i class="fa-solid fa-check text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold leading-6 text-emerald-950">Pesanan Selamat Diterima!</h3>
+                        <p class="text-xs text-gray-400 mt-1">Dapur Renjana sedang menyiapkan sajian anda.</p>
+                    </div>
+
+                    <!-- Paper Receipt Lookalike -->
+                    <div class="border border-dashed border-gray-200 bg-gray-50 p-4 rounded-2xl font-mono text-xs text-gray-700 space-y-4">
+                        <div class="text-center border-b border-gray-200 pb-3">
+                            <span class="font-bold text-sm tracking-widest block uppercase">RESTORAN RENJANA</span>
+                            <span class="block text-[10px] text-gray-400">NO. 12, JALAN WARISAN KOTA, KUALA LUMPUR</span>
+                            <span class="block text-[10px] text-gray-400">TEL: +60 3-8888 7777</span>
+                        </div>
+
+                        <!-- Meta Info -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between">
+                                <span>No. Resit:</span>
+                                <span id="receipt-id" class="font-bold">#RENJ-88219</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Tarikh/Masa:</span>
+                                <span id="receipt-datetime">06/07/2026 12:45PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Jenis Pesanan:</span>
+                                <span id="receipt-type" class="font-bold text-emerald-800">Makan Di Sini (Meja 5)</span>
+                            </div>
+                        </div>
+
+                        <!-- Item list -->
+                        <div class="border-t border-dashed border-gray-200 pt-3 space-y-2">
+                            <span class="font-bold block uppercase text-[10px] text-gray-400">SENARAI PESANAN</span>
+                            <div id="receipt-items" class="space-y-1">
+                                <!-- Dynamic receipts items go here -->
+                            </div>
+                        </div>
+
+                        <!-- Total pricing -->
+                        <div class="border-t border-dashed border-gray-200 pt-3 space-y-1">
+                            <div class="flex justify-between">
+                                <span>Jumlah Makanan:</span>
+                                <span id="receipt-subtotal">RM 0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Cukai Kerajaan (SST 6%):</span>
+                                <span id="receipt-sst">RM 0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Caj Layanan (10%):</span>
+                                <span id="receipt-service">RM 0.00</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-sm text-emerald-950 border-t border-gray-200 pt-2">
+                                <span>JUMLAH BESAR:</span>
+                                <span id="receipt-grandtotal">RM 0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center border-t border-gray-200 pt-3 text-[10px] text-gray-400 leading-tight">
+                            Terima Kasih kerana menjamu selera di Renjana. <br>
+                            Sila tunjukkan resit ini kepada pelayan / kasir.
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons in Modal -->
+                    <div class="mt-6 space-y-2">
+                        <button onclick="closeReceiptModal()" class="w-full py-3 bg-emerald-900 hover:bg-emerald-950 text-white font-bold rounded-xl shadow transition">
+                            Tutup & Kembali
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT SECTION -->
+    <section id="hubungi" class="py-20 bg-emerald-950 text-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-gold-400 text-xs font-bold tracking-widest uppercase">Hubungi Kami</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold">Singgahlah Di Renjana</h2>
+                    <p class="text-emerald-100/80 leading-relaxed text-sm">
+                        Kami terletak di tengah-tengah pusat bandar warisan. Sesuai untuk perhimpunan santai keluarga, bersantai di waktu malam, atau katering korporat bertaraf lima bintang.
+                    </p>
+                    
+                    <div class="space-y-4 text-sm text-emerald-100">
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-map-location-dot text-lg text-gold-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Alamat Kami</h4>
+                                <p class="text-emerald-200/90 mt-1">Lot 120, Seksyen 7, Jalan Warisan Melayu Utama, Bukit Persekutuan, 50480 Kuala Lumpur.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-phone-volume text-lg text-gold-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Talian Hubung</h4>
+                                <p class="text-emerald-200/90 mt-1">+60 3-8888 7777 / +60 12-345 6789</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-envelope-open-text text-lg text-gold-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-white">E-mel Rasmi</h4>
+                                <p class="text-emerald-200/90 mt-1">sajian@renjana-restoran.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps Embed Placeholder styled dynamically -->
+                <div class="lg:col-span-7 rounded-3xl overflow-hidden border-4 border-emerald-900 shadow-2xl relative bg-emerald-900 p-8 flex flex-col justify-between min-h-[300px]">
+                    <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800');"></div>
+                    <div class="relative">
+                        <span class="bg-gold-500 text-emerald-950 font-bold px-3 py-1 rounded-full text-[10px] tracking-wider uppercase inline-block mb-3">Peta Lokasi Pintar</span>
+                        <h4 class="font-serif text-2xl font-bold text-white mb-2">Mudah Dicari & Parkir Luas</h4>
+                        <p class="text-xs text-emerald-200">Terletak bersebelahan dengan Dataran Warisan, berdekatan dengan Stesen LRT Bukit Persekutuan (3 minit jalan kaki).</p>
+                    </div>
+                    <div class="relative bg-emerald-950/60 p-4 rounded-xl border border-white/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                        <span class="text-xs text-white">Klik butang navigasi GPS untuk mulakan pemanduan anda:</span>
+                        <div class="flex gap-2">
+                            <a href="#" class="px-4 py-2 bg-emerald-900 hover:bg-emerald-800 border border-gold-500/20 text-gold-400 text-xs font-bold rounded-lg flex items-center gap-1">
+                                <i class="fa-solid fa-map-pin"></i> Waze
+                            </a>
+                            <a href="#" class="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-emerald-950 text-xs font-bold rounded-lg flex items-center gap-1">
+                                <i class="fa-solid fa-location-arrow"></i> Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#021814] text-gray-400 py-12 border-t border-emerald-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gold-500 p-2 rounded-full">
+                    <svg class="w-5 h-5 text-emerald-950" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="font-serif text-lg font-bold tracking-widest text-white block leading-tight">RENJANA</span>
+                    <span class="text-[9px] tracking-widest text-emerald-400 block -mt-1">© 2026 RENJANA RESTORAN. HAK CIPTA TERPELIHARA.</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 text-emerald-400">
+                <a href="#" class="hover:text-gold-400 text-lg"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="hover:text-gold-400 text-lg"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-gold-400 text-lg"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="hover:text-gold-400 text-lg"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Restoran Renjana - Menu Data
+        const menuData = [
+            // LUNCH SETS
+            {
+                id: 'set-lunch-1',
+                name: 'Set Lunch Renjana Klasik',
+                category: 'lunch-set',
+                price: 25.00,
+                description: 'Nasi Wangi Pandan disajikan bersama Ayam Goreng Berempah Garing, ulam-ulaman segar, Sambal Belacan, Sayur Campur dan segelas Sirap Selasih.',
+                tag: 'Popolar',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'set-lunch-2',
+                name: 'Set Lunch Selera Kampung',
+                category: 'lunch-set',
+                price: 28.00,
+                description: 'Nasi Hujan Panas digandingkan dengan Daging Masak Hitam Manis, Jelatah, Papadom rangup, ulam kuah singgang dan Teh Tarik Madu.',
+                tag: 'Tradisi',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            
+            // DINNER SETS
+            {
+                id: 'set-dinner-1',
+                name: 'Set Dinner Warisan Agong (2-3 Pax)',
+                category: 'dinner-set',
+                price: 68.00,
+                description: 'Set lengkap hidangan makan malam untuk berdua: Nasi Wangi, Siakap Bakar Sambal Kawah, Tomyam Campur Segar, Kailan Ikan Masin, Telur Dadar & Jagung Saji.',
+                tag: 'Eksklusif',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'set-dinner-2',
+                name: 'Set Dinner Dendang Perantau (4-5 Pax)',
+                category: 'dinner-set',
+                price: 135.00,
+                description: 'Set mega untuk seisi keluarga: Nasi Wangi, Daging Salai Lemak Cili Api Negeri Sembilan, Ayam Masak Merah Gunting, Kerapu Masam Manis Tiga Rasa, Sayur Campur, & Sirap Bandung Soda Gergasi.',
+                tag: 'Keluarga',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+
+            // LAUK-PAUK ALA CARTE
+            {
+                id: 'lauk-1',
+                name: 'Daging Salai Lemak Cili Api',
+                category: 'lauk-pauk',
+                price: 18.00,
+                description: 'Daging salai premium dimasak perlahan di dalam santan pekat asli bersama cili padi kampung segar dan belimbing buluh masam manis.',
+                tag: 'Signature',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'lauk-2',
+                name: 'Ayam Goreng Berempah Garing',
+                category: 'lauk-pauk',
+                price: 9.50,
+                description: 'Dua ketul ayam segar yang diperap semalaman bersama serai, lengkuas, halia dan ketumbar lalu digoreng garing berminyak emas.',
+                tag: 'Wajib Cuba',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'lauk-3',
+                name: 'Siakap Bakar Sambal Tempoyak',
+                category: 'lauk-pauk',
+                price: 36.00,
+                description: 'Ikan Siakap segar laut dibakar di atas daun pisang disalut pes sambal pedas bercampur tempoyak durian berkualiti tinggi.',
+                tag: 'Unik',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+
+            // MINUMAN (DRINKS)
+            {
+                id: 'air-1',
+                name: 'Sirap Bandung Soda Selasih',
+                category: 'minuman',
+                price: 6.50,
+                description: 'Gandingan sirap rose harum, susu cair, air soda berbuih halus dan taburan biji selasih penyejuk badan.',
+                tag: 'Segar',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'air-2',
+                name: 'Teh Tarik Madu Berbuih',
+                category: 'minuman',
+                price: 5.50,
+                description: 'Teh ceylon pekat dibancuh bersama susu manis dan ditarik sehingga berbuih berkrim tebal dengan tambahan limpahan madu kelulut asli.',
+                tag: 'Pilihan Ramai',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'air-3',
+                name: 'Kopi Kampung Gula Apong',
+                category: 'minuman',
+                price: 7.00,
+                description: 'Kopi kaw kaw kaw gilingan kampung tradisional dibancuh dengan kemanisan beraroma Gula Apong asli Sarawak.',
+                tag: 'Kaw',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+
+            // PENCUCI MULUT (DESSERTS)
+            {
+                id: 'pencuci-1',
+                name: 'Bubur Sumsum Santan Pekat',
+                category: 'pencuci-mulut',
+                price: 6.00,
+                description: 'Tekstur sumsum yang lembut cair di mulut dari tepung beras wangi disiram kuah gula melaka pekat beraroma pandan.',
+                tag: 'Klasik',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            },
+            {
+                id: 'pencuci-2',
+                name: 'Sago Gumpal Gula Melaka',
+                category: 'pencuci-mulut',
+                price: 7.50,
+                description: 'Gumpalan sago bermutu tinggi dihidang sejuk bersama susu kelapa segar dan kemanisan madu gula melaka sejati.',
+                tag: 'Sedap',
+                image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&q=80&w=600'
+            }
+        ];
+
+        // State Management
+        let cart = [];
+        let currentOrderMode = 'booking'; // 'booking' or 'walkin'
+        let selectedTable = null;
+        let activeCategory = 'semua';
+        let bookingDetails = null;
+
+        // Initialization
+        window.onload = function() {
+            generateTablesGrid();
+            renderMenuItems();
+            updateCartUI();
+            
+            // Set default date to today for booking form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').min = today;
+            document.getElementById('booking-date').value = today;
+        };
+
+        // Scroll helper
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Toggle Mobile Navigation Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.className = 'fa-solid fa-xmark text-2xl';
+            } else {
+                menu.classList.add('hidden');
+                icon.className = 'fa-solid fa-bars text-2xl';
+            }
+        }
+
+        // Switch main service tab (Booking / Walk-In)
+        function switchMainService(mode) {
+            currentOrderMode = mode;
+            const bookingBtn = document.getElementById('tab-booking-btn');
+            const walkinBtn = document.getElementById('tab-walkin-btn');
+            const bookingContainer = document.getElementById('booking-container');
+            const walkinContainer = document.getElementById('walkin-container');
+
+            if (mode === 'booking') {
+                bookingBtn.className = "flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 bg-emerald-900 text-white shadow-md";
+                walkinBtn.className = "flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 text-emerald-900 hover:bg-emerald-100/50";
+                bookingContainer.classList.remove('hidden');
+                setTimeout(() => bookingContainer.classList.add('opacity-100'), 50);
+                walkinContainer.classList.add('hidden');
+                walkinContainer.classList.remove('opacity-100');
+            } else {
+                walkinBtn.className = "flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 bg-emerald-900 text-white shadow-md";
+                bookingBtn.className = "flex-1 py-4 px-6 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 text-emerald-900 hover:bg-emerald-100/50";
+                walkinContainer.classList.remove('hidden');
+                setTimeout(() => walkinContainer.classList.add('opacity-100'), 50);
+                bookingContainer.classList.add('hidden');
+                bookingContainer.classList.remove('opacity-100');
+            }
+            updateCartUI();
+        }
+
+        // Open specific workspace
+        function openBookingSection() {
+            switchMainService('booking');
+            scrollToSection('services-section');
+        }
+
+        function openWalkInSection() {
+            switchMainService('walkin');
+            scrollToSection('services-section');
+        }
+
+        // Generate Table Selector for Walk-In
+        function generateTablesGrid() {
+            const grid = document.getElementById('table-selector-grid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 15; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `table-btn-${i}`;
+                btn.onclick = () => selectPhysicalTable(i);
+                btn.className = "h-12 w-full font-bold text-sm rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-emerald-50 hover:border-emerald-600 transition flex items-center justify-center";
+                btn.innerText = `Meja ${i}`;
+                grid.appendChild(btn);
+            }
+        }
+
+        function selectPhysicalTable(tableNum) {
+            // Reset all table button styles
+            for (let i = 1; i <= 15; i++) {
+                const b = document.getElementById(`table-btn-${i}`);
+                if (b) b.className = "h-12 w-full font-bold text-sm rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-emerald-50 hover:border-emerald-600 transition flex items-center justify-center";
+            }
+            
+            // Set active
+            selectedTable = tableNum;
+            const activeBtn = document.getElementById(`table-btn-${tableNum}`);
+            if (activeBtn) {
+                activeBtn.className = "h-12 w-full font-bold text-sm rounded-lg bg-emerald-900 text-gold-400 border border-emerald-900 shadow-md transition flex items-center justify-center ring-2 ring-gold-500/50";
+            }
+            updateCartUI();
+        }
+
+        // Render Menu Items dynamically
+        function renderMenuItems() {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+
+            const filtered = activeCategory === 'semua' ? menuData : menuData.filter(item => item.category === activeCategory);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-[#fdfbf7] rounded-3xl border border-gray-200/60 overflow-hidden shadow-md hover:shadow-xl hover:border-gold-500/30 transform hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between";
+                
+                // Content of card
+                card.innerHTML = `
+                    <div>
+                        <!-- Image & Tag -->
+                        <div class="relative h-48 bg-emerald-950/20 overflow-hidden flex items-center justify-center">
+                            <!-- Premium geometric pattern fallback instead of standard image failures -->
+                            <div class="absolute inset-0 opacity-10 bg-cover bg-center" style="background-image: url('${item.image}');"></div>
+                            <div class="relative text-center p-4">
+                                <span class="block font-serif text-emerald-900 font-bold opacity-30 text-lg uppercase tracking-widest">${item.name}</span>
+                                <i class="fa-solid fa-utensils text-emerald-800 opacity-20 text-4xl mt-2"></i>
+                            </div>
+                            <span class="absolute top-4 left-4 bg-emerald-900 text-gold-400 text-[10px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full shadow border border-gold-500/20">
+                                ${item.tag}
+                            </span>
+                        </div>
+                        
+                        <!-- Details -->
+                        <div class="p-6">
+                            <h3 class="font-serif text-lg font-bold text-emerald-950 leading-snug mb-2">${item.name}</h3>
+                            <p class="text-xs text-gray-500 leading-relaxed mb-4">${item.description}</p>
+                        </div>
+                    </div>
+
+                    <!-- Price & Add To Cart Button -->
+                    <div class="p-6 pt-0 border-t border-gray-100 mt-2 flex items-center justify-between">
+                        <div>
+                            <span class="block text-[9px] uppercase tracking-wider text-gray-400">Harga Seunit</span>
+                            <span class="font-serif text-xl font-extrabold text-gold-700">RM ${item.price.toFixed(2)}</span>
+                        </div>
+                        <button onclick="addToCart('${item.id}')" class="px-4 py-2 bg-emerald-900 hover:bg-emerald-950 text-white font-bold text-xs rounded-xl transition flex items-center gap-2 shadow hover:shadow-emerald-900/10">
+                            <i class="fa-solid fa-cart-plus"></i> Tambah
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter Menu Categories
+        function filterMenu(category) {
+            activeCategory = category;
+            
+            // Toggle active classes on filter buttons
+            const btns = document.querySelectorAll('.cat-btn');
+            btns.forEach(btn => {
+                btn.className = "cat-btn px-6 py-2.5 rounded-full text-sm font-bold text-emerald-900 hover:bg-emerald-50 transition-all duration-300";
+            });
+
+            const activeBtn = document.getElementById(`cat-${category}`);
+            if (activeBtn) {
+                activeBtn.className = "cat-btn px-6 py-2.5 rounded-full text-sm font-bold bg-emerald-900 text-white shadow-md transition-all duration-300";
+            }
+
+            renderMenuItems();
+        }
+
+        // Cart Drawer Control
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-overlay');
+            const panel = document.getElementById('cart-panel');
+
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.add('opacity-100');
+                    panel.classList.remove('translate-x-full');
+                }, 50);
+            } else {
+                overlay.classList.remove('opacity-100');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Switch modes inside cart drawer
+        function changeOrderModeInCart(mode) {
+            currentOrderMode = mode;
+            const bWalkIn = document.getElementById('cart-mode-walkin');
+            const bBooking = document.getElementById('cart-mode-booking');
+
+            if (mode === 'walkin') {
+                bWalkIn.className = "flex-1 py-2 text-xs font-bold rounded-lg border border-emerald-800 bg-emerald-900 text-white text-center shadow-sm";
+                bBooking.className = "flex-1 py-2 text-xs font-bold rounded-lg border border-gray-200 text-emerald-900 text-center hover:bg-emerald-100/30";
+            } else {
+                bBooking.className = "flex-1 py-2 text-xs font-bold rounded-lg border border-emerald-800 bg-emerald-900 text-white text-center shadow-sm";
+                bWalkIn.className = "flex-1 py-2 text-xs font-bold rounded-lg border border-gray-200 text-emerald-900 text-center hover:bg-emerald-100/30";
+            }
+            updateCartUI();
+        }
+
+        // Cart Actions
+        function addToCart(itemId) {
+            const selectedItem = menuData.find(i => i.id === itemId);
+            if (!selectedItem) return;
+
+            const existing = cart.find(c => c.id === itemId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    ...selectedItem,
+                    quantity: 1
+                });
+            }
+
+            // Small dynamic cart alert/toast system
+            const alertText = `${selectedItem.name} dimasukkan ke troli!`;
+            showToastNotification(alertText);
+
+            updateCartUI();
+        }
+
+        function updateCartQuantity(itemId, adjustment) {
+            const item = cart.find(c => c.id === itemId);
+            if (!item) return;
+
+            item.quantity += adjustment;
+            if (item.quantity <= 0) {
+                cart = cart.filter(c => c.id !== itemId);
+            }
+
+            updateCartUI();
+        }
+
+        // Toast notification helper
+        function showToastNotification(text) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-4 left-4 z-50 bg-emerald-900 text-gold-400 text-xs font-bold px-4 py-3 rounded-xl shadow-lg border border-gold-500/20 flex items-center gap-2 transform translate-y-20 transition-all duration-300";
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${text}`;
+            document.body.appendChild(toast);
+            
+            // Animate In
+            setTimeout(() => toast.classList.remove('translate-y-20'), 50);
+            
+            // Autoremove
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Update Cart Interface, Calculations and Metadata
+        function updateCartUI() {
+            const cartBadge = document.getElementById('cart-badge');
+            const container = document.getElementById('cart-items-container');
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+            // Badge count
+            if (totalItems > 0) {
+                cartBadge.innerText = totalItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+
+            // Render products lists
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center py-20 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-4 text-gray-300"></i>
+                        <p class="text-sm font-semibold text-gray-500">Troli Hidangan Anda Kosong</p>
+                        <p class="text-xs text-gray-400 mt-1">Sila layari Menu Hidangan untuk memilih masakan melayu kegemaran anda.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '';
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between py-4 border-b border-gray-100 last:border-none";
+                    row.innerHTML = `
+                        <div class="flex-1 pr-4">
+                            <span class="block font-serif text-sm font-bold text-emerald-950">${item.name}</span>
+                            <span class="text-xs text-gold-700 font-semibold mt-1 block">RM ${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-emerald-50 rounded-lg p-1.5">
+                            <button onclick="updateCartQuantity('${item.id}', -1)" class="w-6 h-6 flex items-center justify-center bg-white rounded hover:bg-emerald-900 hover:text-white transition shadow-sm text-xs font-bold">-</button>
+                            <span class="text-xs font-bold px-2 text-emerald-950">${item.quantity}</span>
+                            <button onclick="updateCartQuantity('${item.id}', 1)" class="w-6 h-6 flex items-center justify-center bg-white rounded hover:bg-emerald-900 hover:text-white transition shadow-sm text-xs font-bold">+</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            // Calculation and Pricing
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const serviceTax = subtotal * 0.10; // 10% Service Tax
+            const sst = subtotal * 0.06; // 6% Gov Tax
+            const grandTotal = subtotal + serviceTax + sst;
+
+            document.getElementById('cart-subtotal').innerText = `RM ${subtotal.toFixed(2)}`;
+            document.getElementById('cart-service-tax').innerText = `RM ${serviceTax.toFixed(2)}`;
+            document.getElementById('cart-sst').innerText = `RM ${sst.toFixed(2)}`;
+            document.getElementById('cart-grandtotal').innerText = `RM ${grandTotal.toFixed(2)}`;
+
+            // Context/Metadata Info (Table No or Booking slot details)
+            const contextContainer = document.getElementById('cart-context-info');
+            if (currentOrderMode === 'walkin') {
+                if (selectedTable) {
+                    contextContainer.innerHTML = `
+                        <span>Pesanan Makan Di Sini:</span>
+                        <span class="font-bold text-emerald-900 uppercase">Meja ${selectedTable}</span>
+                    `;
+                    contextContainer.classList.remove('hidden');
+                } else {
+                    contextContainer.innerHTML = `
+                        <span class="text-red-500 font-semibold"><i class="fa-solid fa-triangle-exclamation"></i> Sila pilih nombor meja di seksyen Walk-In!</span>
+                    `;
+                    contextContainer.classList.remove('hidden');
+                }
+            } else {
+                if (bookingDetails) {
+                    contextContainer.innerHTML = `
+                        <span>Pre-order Tempahan:</span>
+                        <span class="font-bold text-emerald-900 uppercase">${bookingDetails.name} (${bookingDetails.pax} Pax)</span>
+                    `;
+                    contextContainer.classList.remove('hidden');
+                } else {
+                    contextContainer.innerHTML = `
+                        <span>Jenis Pesanan:</span>
+                        <span class="font-bold text-gray-500">Makan Di Kedai (Tempahan)</span>
+                    `;
+                    contextContainer.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Booking Submission
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('booking-name').value;
+            const phone = document.getElementById('booking-phone').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const pax = document.getElementById('booking-pax').value;
+            const notes = document.getElementById('booking-notes').value;
+
+            bookingDetails = {
+                name,
+                phone,
+                date,
+                time,
+                pax,
+                notes
+            };
+
+            // Switch to Preorder system & notification
+            updateCartUI();
+            showToastNotification(`Meja Berjaya Ditempah! Anda digalakkan menambah preorder hidangan.`);
+            
+            // Redirect smoothly to Menu section
+            scrollToSection('menu');
+        }
+
+        // Receipt Generation & Final Checkout
+        function processCheckout() {
+            if (cart.length === 0) {
+                showToastNotification("Troli kosong! Sila pilih makanan atau minuman terlebih dahulu.");
+                return;
+            }
+
+            if (currentOrderMode === 'walkin' && !selectedTable) {
+                showToastNotification("Sila pilih nombor meja fizikal anda di bahagian Walk-In.");
+                openWalkInSection();
+                toggleCartDrawer();
+                return;
+            }
+
+            // Close Drawer
+            toggleCartDrawer();
+
+            // Populate Paper Receipt
+            const receiptId = `#RENJ-${Math.floor(10000 + Math.random() * 90000)}`;
+            const dateObj = new Date();
+            const datetimeStr = dateObj.toLocaleDateString('ms-MY') + ' ' + dateObj.toLocaleTimeString('ms-MY', {hour: '2-digit', minute:'2-digit'});
+
+            document.getElementById('receipt-id').innerText = receiptId;
+            document.getElementById('receipt-datetime').innerText = datetimeStr;
+
+            // Type Label
+            const typeLabel = document.getElementById('receipt-type');
+            if (currentOrderMode === 'walkin') {
+                typeLabel.innerText = `Makan Di Sini (Meja ${selectedTable})`;
+            } else {
+                const bName = bookingDetails ? bookingDetails.name : 'Pelanggan';
+                const bPax = bookingDetails ? bookingDetails.pax : '2';
+                const bTime = bookingDetails ? bookingDetails.time : '12:30';
+                typeLabel.innerText = `Tempahan: ${bName} (${bPax} Pax @ ${bTime})`;
+            }
+
+            // Populate items list in receipt
+            const itemsContainer = document.getElementById('receipt-items');
+            itemsContainer.innerHTML = '';
+
+            cart.forEach(item => {
+                const line = document.createElement('div');
+                line.className = "flex justify-between";
+                line.innerHTML = `
+                    <span>${item.quantity}x ${item.name}</span>
+                    <span>RM ${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                itemsContainer.appendChild(line);
+            });
+
+            // Populate Calculations
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const serviceTax = subtotal * 0.10;
+            const sst = subtotal * 0.06;
+            const grandTotal = subtotal + serviceTax + sst;
+
+            document.getElementById('receipt-subtotal').innerText = `RM ${subtotal.toFixed(2)}`;
+            document.getElementById('receipt-sst').innerText = `RM ${sst.toFixed(2)}`;
+            document.getElementById('receipt-service').innerText = `RM ${serviceTax.toFixed(2)}`;
+            document.getElementById('receipt-grandtotal').innerText = `RM ${grandTotal.toFixed(2)}`;
+
+            // Clear everything state wise
+            cart = [];
+            selectedTable = null;
+            bookingDetails = null;
+            updateCartUI();
+
+            // Open Receipt Modal
+            const modal = document.getElementById('receipt-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeReceiptModal() {
+            const modal = document.getElementById('receipt-modal');
+            modal.classList.add('hidden');
+            scrollToSection('home');
+        }
+    </script>
+</body>
+</html>
